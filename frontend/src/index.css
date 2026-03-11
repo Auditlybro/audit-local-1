@@ -1,0 +1,60 @@
+/* Audit-Local — Dark navy + gold theme. Bloomberg meets Indian fintech. */
+
+:root {
+  --bg-primary: #0A0F1E;
+  --bg-secondary: #111827;
+  --bg-sidebar: #0D1117;
+  --accent: #C9A84C;
+  --accent-muted: rgba(201, 168, 76, 0.15);
+  --success: #10B981;
+  --danger: #EF4444;
+  --text-primary: #F9FAFB;
+  --text-muted: #6B7280;
+  --border: #1F2937;
+  --radius-card: 8px;
+  --radius-input: 6px;
+  --radius-badge: 4px;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(201, 168, 76, 0.35);
+  color: var(--text-primary);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b8943d;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}

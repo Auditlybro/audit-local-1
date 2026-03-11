@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ENVELOPE>
+  <HEADER>
+    <TALLYREQUEST>Export Data</TALLYREQUEST>
+  </HEADER>
+  <BODY>
+    <IMPORTDATA>
+      <REQUESTDESC>
+        <REPORTNAME>Voucher Register</REPORTNAME>
+      </REQUESTDESC>
+      <REQUESTDATA>
+        <TALLYMESSAGE>
+          <VOUCHER>
+            <DATE>20240405</DATE>
+            <VOUCHERTYPENAME>Sales</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Sales Account</LEDGERNAME>
+                <AMOUNT>-75000</AMOUNT>
+                <NARRATION>Invoice INV/24-001</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>75000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240408</DATE>
+            <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Kumar Enterprises</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Purchase Account</LEDGERNAME>
+                <AMOUNT>45000</AMOUNT>
+                <NARRATION>Bill No. BE/0424</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Kumar Enterprises</LEDGERNAME>
+                <AMOUNT>-45000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240412</DATE>
+            <VOUCHERTYPENAME>Payment</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>GST Dept</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Cash</LEDGERNAME>
+                <AMOUNT>-25000</AMOUNT>
+                <NARRATION>GST payment Apr 24</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>GST Dept</LEDGERNAME>
+                <AMOUNT>25000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240415</DATE>
+            <VOUCHERTYPENAME>Receipt</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Cash</LEDGERNAME>
+                <AMOUNT>120000</AMOUNT>
+                <NARRATION>Against INV/24-001</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>-120000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240418</DATE>
+            <VOUCHERTYPENAME>Sales</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Kumar Enterprises</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Sales Account</LEDGERNAME>
+                <AMOUNT>-95000</AMOUNT>
+                <NARRATION>Invoice INV/24-002</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Kumar Enterprises</LEDGERNAME>
+                <AMOUNT>95000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240422</DATE>
+            <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Purchase Account</LEDGERNAME>
+                <AMOUNT>35000</AMOUNT>
+                <NARRATION>Stock purchase</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>-35000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240425</DATE>
+            <VOUCHERTYPENAME>Payment</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Kumar Enterprises</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Bank</LEDGERNAME>
+                <AMOUNT>-50000</AMOUNT>
+                <NARRATION>Payment against BE/0424</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Kumar Enterprises</LEDGERNAME>
+                <AMOUNT>50000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240502</DATE>
+            <VOUCHERTYPENAME>Receipt</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>GST Dept</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Bank</LEDGERNAME>
+                <AMOUNT>180000</AMOUNT>
+                <NARRATION>Refund received</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>GST Dept</LEDGERNAME>
+                <AMOUNT>-180000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240505</DATE>
+            <VOUCHERTYPENAME>Sales</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Sales Account</LEDGERNAME>
+                <AMOUNT>-55000</AMOUNT>
+                <NARRATION>Invoice INV/24-003</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>55000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240510</DATE>
+            <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Kumar Enterprises</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Purchase Account</LEDGERNAME>
+                <AMOUNT>72000</AMOUNT>
+                <NARRATION>BE/0524</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Kumar Enterprises</LEDGERNAME>
+                <AMOUNT>-72000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240512</DATE>
+            <VOUCHERTYPENAME>Payment</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Cash</LEDGERNAME>
+                <AMOUNT>-25000</AMOUNT>
+                <NARRATION>Advance to supplier</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>25000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240412</DATE>
+            <VOUCHERTYPENAME>Payment</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>GST Dept</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>GST Dept</LEDGERNAME>
+                <AMOUNT>25000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <!-- ^ DUPLICATE: same date 20240412 + amount 25000 + party GST Dept -->
+          <VOUCHER>
+            <DATE>20240515</DATE>
+            <VOUCHERTYPENAME>Receipt</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Kumar Enterprises</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Bank</LEDGERNAME>
+                <AMOUNT>200000</AMOUNT>
+                <NARRATION>Full settlement</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Kumar Enterprises</LEDGERNAME>
+                <AMOUNT>-200000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240520</DATE>
+            <VOUCHERTYPENAME>Sales</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>GST Dept</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Sales Account</LEDGERNAME>
+                <AMOUNT>-85000</AMOUNT>
+                <NARRATION>Tax invoice</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>GST Dept</LEDGERNAME>
+                <AMOUNT>85000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240522</DATE>
+            <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Purchase Account</LEDGERNAME>
+                <AMOUNT>42000</AMOUNT>
+                <NARRATION>Local purchase</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>-42000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240425</DATE>
+            <VOUCHERTYPENAME>Payment</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Kumar Enterprises</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Kumar Enterprises</LEDGERNAME>
+                <AMOUNT>50000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <!-- ^ DUPLICATE: same date 20240425 + amount 50000 + party Kumar Enterprises -->
+          <VOUCHER>
+            <DATE>20240601</DATE>
+            <VOUCHERTYPENAME>Receipt</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Bank</LEDGERNAME>
+                <AMOUNT>95000</AMOUNT>
+                <NARRATION>Against INV/24-003</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>-95000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240601</DATE>
+            <VOUCHERTYPENAME>Receipt</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>-95000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <!-- ^ DUPLICATE: same date 20240601 + amount 95000 + party Raj Traders (one entry row) -->
+          <VOUCHER>
+            <DATE>20240605</DATE>
+            <VOUCHERTYPENAME>Sales</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Kumar Enterprises</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Sales Account</LEDGERNAME>
+                <AMOUNT>-110000</AMOUNT>
+                <NARRATION>Invoice INV/24-004</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Kumar Enterprises</LEDGERNAME>
+                <AMOUNT>110000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240608</DATE>
+            <VOUCHERTYPENAME>Purchase</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>GST Dept</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Purchase Account</LEDGERNAME>
+                <AMOUNT>15000</AMOUNT>
+                <NARRATION>Tax adjustment</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>GST Dept</LEDGERNAME>
+                <AMOUNT>-15000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240612</DATE>
+            <VOUCHERTYPENAME>Payment</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Raj Traders</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Cash</LEDGERNAME>
+                <AMOUNT>-5000</AMOUNT>
+                <NARRATION>Petty payment</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Raj Traders</LEDGERNAME>
+                <AMOUNT>5000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+          <VOUCHER>
+            <DATE>20240615</DATE>
+            <VOUCHERTYPENAME>Receipt</VOUCHERTYPENAME>
+            <PARTYLEDGERNAME>Kumar Enterprises</PARTYLEDGERNAME>
+            <ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Bank</LEDGERNAME>
+                <AMOUNT>250000</AMOUNT>
+                <NARRATION>Final receipt Q2</NARRATION>
+              </ALLLEDGERENTRIES.LIST>
+              <ALLLEDGERENTRIES.LIST>
+                <LEDGERNAME>Kumar Enterprises</LEDGERNAME>
+                <AMOUNT>-250000</AMOUNT>
+              </ALLLEDGERENTRIES.LIST>
+            </ALLLEDGERENTRIES.LIST>
+          </VOUCHER>
+        </TALLYMESSAGE>
+      </REQUESTDATA>
+    </IMPORTDATA>
+  </BODY>
+</ENVELOPE>

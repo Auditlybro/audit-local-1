@@ -1,0 +1,326 @@
+/* Notice Doctor — dark navy + gold, two-column, cards */
+
+.notice-doctor {
+  max-width: 1400px;
+}
+
+.notice-doctor-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .notice-doctor-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ——— Left: Input panel ——— */
+.notice-doctor-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notice-doctor-label {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.notice-doctor-textarea {
+  width: 100%;
+  height: 400px;
+  min-height: 400px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.notice-doctor-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.notice-doctor-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.notice-doctor-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: var(--radius-input);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: filter 0.2s, background 0.2s;
+}
+
+.notice-doctor-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.notice-doctor-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  transition: left 0.5s ease;
+}
+
+.notice-doctor-btn:hover:not(:disabled)::after {
+  left: 100%;
+}
+
+.notice-doctor-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.notice-doctor-btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(10, 15, 30, 0.3);
+  border-top-color: var(--bg-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ——— Right: Output panel ——— */
+.notice-doctor-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.notice-doctor-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  padding: 24px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.notice-doctor-loading .spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.notice-doctor-error {
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: var(--radius-input);
+  font-size: 0.9rem;
+}
+
+/* NOTICE SUMMARY card */
+.notice-doctor-block {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 20px;
+}
+
+.notice-doctor-block h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0 0 16px 0;
+}
+
+.notice-doctor-summary {
+  display: grid;
+  gap: 14px;
+}
+
+.notice-doctor-summary div {
+  display: block;
+}
+
+.notice-doctor-summary dt {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.notice-doctor-summary dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.notice-doctor-summary dd.amount-value {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: var(--accent);
+}
+
+/* LAW SECTIONS card */
+.notice-doctor-sections {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notice-doctor-section {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+  padding-left: 12px;
+  border-left: 3px solid transparent;
+}
+
+.notice-doctor-section:last-child {
+  border-bottom: none;
+}
+
+.notice-doctor-section {
+  border-left-color: var(--accent);
+}
+
+.notice-doctor-section-head {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.notice-doctor-section strong {
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+.notice-doctor-section-title {
+  font-weight: normal;
+  color: var(--text-primary);
+}
+
+.notice-doctor-section p {
+  margin: 8px 0 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.notice-doctor-section-empty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 12px 0;
+}
+
+.notice-doctor-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-badge);
+  letter-spacing: 0.02em;
+  margin-left: 0;
+}
+
+.notice-doctor-badge.cited {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.notice-doctor-badge.related {
+  background: var(--text-muted);
+  color: var(--text-primary);
+}
+
+/* DRAFT REPLY card */
+.notice-doctor-reply-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.notice-doctor-reply {
+  width: 100%;
+  min-height: 300px;
+  padding: 16px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.notice-doctor-reply:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.notice-doctor-copy {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-input);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.notice-doctor-copy:hover:not(:disabled) {
+  background: var(--accent-muted);
+}
+
+.notice-doctor-copy:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notice-doctor-placeholder {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 24px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}

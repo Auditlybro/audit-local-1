@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Build / runtime
+frontend/dist/
+frontend/src-tauri/target/
+*.egg-info/
+.eggs/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Env (no secrets in repo)
+.env
+.env.local
+*.local
+
+# Logs
+*.log
+npm-debug.log*

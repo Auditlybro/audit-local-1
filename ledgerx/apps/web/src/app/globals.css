@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0B1120;
+  --foreground: #e2e8f0;
+  --gold: #C9A84C;
+  --gold-light: #ddc070;
+  --navy: #0B1120;
+  --navy-light: #1a2744;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-ibm-plex-sans), system-ui, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .font-number {
+    font-family: var(--font-ibm-plex-mono), monospace;
+  }
+}

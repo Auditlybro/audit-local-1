@@ -1,0 +1,8 @@
+uvicorn[standard]>=0.24
+fastapi>=0.100
+sqlalchemy>=2
+asyncpg
+redis
+python-dotenv
+psycopg2-binary
+openpyxl

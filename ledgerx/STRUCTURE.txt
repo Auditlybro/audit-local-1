@@ -1,0 +1,54 @@
+ledgerx/
+├── .git/
+├── .gitignore
+├── CURSOR_RULES.md
+├── STRUCTURE.txt
+├── apps/
+│   ├── desktop/
+│   │   └── README.md
+│   ├── mobile/
+│   │   └── README.md
+│   └── web/                    # Next.js 14 + TypeScript + Tailwind
+│       ├── .eslintrc.json
+│       ├── .gitignore
+│       ├── next-env.d.ts
+│       ├── next.config.mjs
+│       ├── package.json
+│       ├── postcss.config.mjs
+│       ├── README.md
+│       ├── tailwind.config.ts
+│       ├── tsconfig.json
+│       └── src/
+│           ├── app/
+│           │   ├── layout.tsx
+│           │   ├── page.tsx
+│           │   └── globals.css
+│           └── ...
+│       (node_modules/ and .next/ omitted)
+├── backend/
+│   ├── core/                   # FastAPI main app
+│   │   ├── main.py
+│   │   ├── requirements.txt
+│   │   ├── db/
+│   │   │   └── __init__.py
+│   │   ├── models/
+│   │   │   └── __init__.py
+│   │   ├── routers/
+│   │   │   ├── __init__.py
+│   │   │   └── health.py
+│   │   ├── schemas/
+│   │   │   └── __init__.py
+│   │   └── services/
+│   │       └── __init__.py
+│   ├── ai/
+│   └── worker/
+├── database/
+│   ├── migrations/
+│   │   └── 001_initial.sql
+│   └── seeds/
+│       └── 001_ledger_groups.sql
+├── docs/
+├── packages/
+│   ├── ui/
+│   ├── types/
+│   └── utils/

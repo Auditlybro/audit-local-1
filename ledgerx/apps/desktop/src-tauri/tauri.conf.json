@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "LedgerX",
+  "version": "0.1.0",
+  "identifier": "in.ledgerx.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "title": "LedgerX",
+        "width": 1280,
+        "height": 800,
+        "minWidth": 1280,
+        "minHeight": 800,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "createUpdaterArtifacts": true,
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": ""
+    },
+    "category": "Finance",
+    "shortDescription": "Accounting for Indian CAs & SMEs",
+    "longDescription": "LedgerX — Full-stack accounting: Tally import, GST, notices, multi-user. Desktop, web, mobile."
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YnRpYyBrZXkKUlVUVlR4NnpY...",
+      "endpoints": ["https://releases.ledgerx.in/{{target}}/{{current_version}}"]
+    }
+  }
+}

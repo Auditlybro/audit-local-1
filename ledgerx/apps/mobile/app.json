@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "LedgerX",
+    "slug": "ledgerx-mobile",
+    "version": "0.1.0",
+    "scheme": "ledgerx",
+    "platforms": ["ios", "android"],
+    "ios": { "bundleIdentifier": "in.ledgerx.app" },
+    "android": { "package": "in.ledgerx.app" }
+  }
+}

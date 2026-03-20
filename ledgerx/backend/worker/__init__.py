@@ -1,0 +1,1 @@
+# LedgerX Celery worker

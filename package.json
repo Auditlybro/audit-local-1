@@ -1,0 +1,18 @@
+{
+  "name": "audit-local-monorepo",
+  "private": true,
+  "scripts": {
+    "dev:web": "cd ledgerx/apps/web && npm run dev",
+    "dev:backend": "cd ledgerx/backend && python -m uvicorn main:app --reload --host 127.0.0.1 --port 8001",
+    "dev:desktop": "cd ledgerx/apps/desktop && npm run tauri dev",
+    "dev:mobile": "cd ledgerx/apps/mobile && npm start",
+    "dev:all": "concurrently -n web,backend -c blue,green \"npm run dev:web\" \"npm run dev:backend\"",
+    "dev:all-with-desktop": "concurrently -n web,backend,desktop -c blue,green,yellow \"npm run dev:web\" \"npm run dev:backend\" \"npm run dev:desktop\"",
+    "db:migrate": "echo 'Run your SQL migrations (e.g. alembic upgrade head)'",
+    "db:seed": "echo 'Seed ledger groups + sample data'",
+    "test:all": "echo 'Run all tests'"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

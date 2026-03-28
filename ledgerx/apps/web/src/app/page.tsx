@@ -8,8 +8,16 @@ export default function HomePage() {
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
+    // Attempt soft navigation first
     if (token) router.replace("/dashboard");
     else router.replace("/login");
+    
+    // Fallback force navigation if Next.js client router hangs (e.g., missing chunks or Suspense locks)
+    const fallback = setTimeout(() => {
+       window.location.assign(token ? "/dashboard" : "/login");
+    }, 1000);
+    
+    return () => clearTimeout(fallback);
   }, [router]);
 
   return (

@@ -1,5 +1,8 @@
 """Application configuration."""
+from pathlib import Path
 from pydantic_settings import BaseSettings
+
+_env_path = Path(__file__).resolve().parent.parent / ".env"
 
 
 class Settings(BaseSettings):
@@ -17,12 +20,22 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
+    # Google OAuth
+    google_client_id: str = ""
+
+    # SMTP for OTP emails
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_pass: str = ""
+
     # App
     app_name: str = "LedgerX API"
 
     class Config:
-        env_file = ".env"
+        env_file = str(_env_path)
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
 
 settings = Settings()

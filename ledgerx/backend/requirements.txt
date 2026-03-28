@@ -6,3 +6,7 @@ redis
 python-dotenv
 psycopg2-binary
 openpyxl
+google-auth
+python-jose[cryptography]
+passlib[bcrypt]
+pydantic-settings

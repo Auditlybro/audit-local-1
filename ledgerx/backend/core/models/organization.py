@@ -31,7 +31,7 @@ class User(Base, TimestampMixin):
     password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
     # relationships
     org: Mapped["Organization | None"] = relationship("Organization", backref="users")
-    companies: Mapped[list["Company"]] = relationship(secondary="org_users", viewonly=True)
+
 
 
 class OrgUser(Base):

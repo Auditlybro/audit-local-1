@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { authApi } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
+import { Logo } from "@/components/brand/Logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,9 +35,9 @@ export default function LoginPage() {
 
   return (
     <div className="rounded-2xl border border-navy-100/20 bg-navy-400/80 p-8 shadow-xl">
-      <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold text-gold">LedgerX</h1>
-        <p className="mt-1 text-sm text-slate-400">Sign in to your account</p>
+      <div className="mb-8 flex flex-col items-center text-center">
+        <Logo variant="full" size="lg" className="justify-center" />
+        <p className="mt-4 text-sm text-slate-400">Sign in to your account</p>
         <p className="mt-2 text-xs text-slate-500">Demo: demo@ledgerx.in / demo123</p>
       </div>
       <form

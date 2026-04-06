@@ -17,7 +17,7 @@ class GstReturn(Base, TimestampMixin):
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid_default)
     company_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
     return_type: Mapped[str] = mapped_column(String(20), nullable=False)
-    period: Mapped[str] = mapped_column(String(10), nullable=False)
+    period: Mapped[str] = mapped_column(String(32), nullable=False)
     status: Mapped[str] = mapped_column(String(30), nullable=False, default="draft")
     filed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     json_data: Mapped[dict | None] = mapped_column(JSONB, nullable=True)

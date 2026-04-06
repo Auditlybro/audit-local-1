@@ -27,7 +27,7 @@ export default function StockItemsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Stock Items</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Stock Items</h1>
         <button
           type="button"
           className="flex items-center gap-2 rounded-lg bg-gold px-4 py-2 text-sm font-medium text-navy"

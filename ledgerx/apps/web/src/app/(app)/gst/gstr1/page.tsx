@@ -18,11 +18,11 @@ export default function Gstr1Page() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-white">GSTR-1</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">GSTR-1</h1>
       <div className="flex gap-4">
-        <input type="month" value={period} onChange={(e) => setPeriod(e.target.value)} className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white" />
+        <input type="month" value={period} onChange={(e) => setPeriod(e.target.value)} className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white" />
         <button type="button" className="flex items-center gap-2 rounded-lg bg-gold px-4 py-2 text-navy"> <Download className="h-4 w-4" /> JSON download </button>
-        <button type="button" className="rounded-lg border border-navy-100/30 px-4 py-2 text-slate-200">Upload to portal</button>
+        <button type="button" className="rounded-lg border border-slate-200 dark:border-navy-100/30 px-4 py-2 text-slate-200">Upload to portal</button>
       </div>
       <p className="text-slate-500 text-sm">B2B, B2C, HSN tables — connect to API data</p>
     </div>

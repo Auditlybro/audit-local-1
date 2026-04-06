@@ -41,14 +41,14 @@ export default function NewPaymentPage() {
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <h1 className="text-2xl font-bold text-white">New Payment</h1>
-      <div className="space-y-4 rounded-xl border border-navy-100/20 bg-navy-400/80 p-6">
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">New Payment</h1>
+      <div className="space-y-4 rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-6">
         <div>
-          <label className="block text-sm text-slate-400">Party (Creditor)</label>
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Party (Creditor)</label>
           <select
             value={partyId}
             onChange={(e) => setPartyId(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+            className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
           >
             <option value="">Select party</option>
             {ledgers.map((l) => (
@@ -57,31 +57,31 @@ export default function NewPaymentPage() {
           </select>
         </div>
         <div>
-          <label className="block text-sm text-slate-400">Date</label>
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Date</label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+            className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-400">Amount (₹)</label>
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Amount (₹)</label>
           <input
             type="number"
             min={0}
             step={0.01}
             value={amount || ""}
             onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
-            className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white font-number"
+            className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white font-number"
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-400">Payment mode</label>
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Payment mode</label>
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as "Cash" | "Bank" | "UPI")}
-            className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+            className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
           >
             <option value="Cash">Cash</option>
             <option value="Bank">Bank</option>
@@ -90,11 +90,11 @@ export default function NewPaymentPage() {
         </div>
         {mode === "Bank" && (
           <div>
-            <label className="block text-sm text-slate-400">Bank ledger</label>
+            <label className="block text-sm text-slate-500 dark:text-slate-400">Bank ledger</label>
             <select
               value={bankLedgerId}
               onChange={(e) => setBankLedgerId(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+              className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
             >
               <option value="">Select bank</option>
               {ledgers.filter((l) => l.name.toLowerCase().includes("bank")).map((l) => (
@@ -104,12 +104,12 @@ export default function NewPaymentPage() {
           </div>
         )}
         <div>
-          <label className="block text-sm text-slate-400">Against bill reference (optional)</label>
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Against bill reference (optional)</label>
           <input
             type="text"
             value={billRef}
             onChange={(e) => setBillRef(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+            className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
           />
         </div>
         <button

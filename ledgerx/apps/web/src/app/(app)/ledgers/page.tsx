@@ -40,7 +40,7 @@ export default function LedgersPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-white">Ledgers</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Ledgers</h1>
         <button
           type="button"
           onClick={() => setModalOpen(true)}
@@ -57,13 +57,13 @@ export default function LedgersPage() {
             placeholder="Search by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-64 rounded-lg border border-navy-100/30 bg-navy-400 pl-9 pr-3 py-2 text-white placeholder-slate-500"
+            className="w-64 rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 pl-9 pr-3 py-2 text-slate-900 dark:text-white placeholder-slate-500"
           />
         </div>
         <select
           value={groupFilter}
           onChange={(e) => setGroupFilter(e.target.value)}
-          className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+          className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
         >
           <option value="">All groups</option>
           {groups.map((g) => (
@@ -79,10 +79,10 @@ export default function LedgersPage() {
       />
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-md rounded-xl border border-navy-100/20 bg-navy-400 p-6">
-            <h2 className="text-lg font-semibold text-white">Add Ledger (placeholder)</h2>
-            <p className="mt-2 text-sm text-slate-400">Connect to ledgersApi.create with form fields.</p>
-            <button type="button" onClick={() => setModalOpen(false)} className="mt-4 rounded-lg bg-navy-100/30 px-4 py-2 text-sm text-slate-200">Close</button>
+          <div className="w-full max-w-md rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400 p-6">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Add Ledger (placeholder)</h2>
+            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Connect to ledgersApi.create with form fields.</p>
+            <button type="button" onClick={() => setModalOpen(false)} className="mt-4 rounded-lg bg-slate-100 dark:bg-navy-100/30 px-4 py-2 text-sm text-slate-200">Close</button>
           </div>
         </div>
       )}

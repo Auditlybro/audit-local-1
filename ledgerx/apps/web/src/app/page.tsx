@@ -21,10 +21,10 @@ export default function HomePage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-navy-500">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-500">
       <div className="flex flex-col items-center gap-3">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold border-t-transparent" aria-hidden />
-        <p className="text-slate-400">Taking you to sign in…</p>
+        <p className="text-slate-500 dark:text-slate-400">Taking you to sign in…</p>
       </div>
     </div>
   );

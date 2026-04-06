@@ -36,8 +36,8 @@ export function GSTINInput({
       onBlur={() => setTouched(true)}
       placeholder={placeholder}
       maxLength={15}
-      className={`rounded-lg border bg-navy-400 px-3 py-2 text-white placeholder-slate-500 ${
-        touched && !valid ? "border-red-500" : "border-navy-100/30"
+      className={`rounded-lg border bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white placeholder-slate-500 ${
+        touched && !valid ? "border-red-500" : "border-slate-200 dark:border-navy-100/30"
       } ${className ?? ""}`}
       {...props}
     />

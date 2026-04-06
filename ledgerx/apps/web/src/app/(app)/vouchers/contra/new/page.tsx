@@ -42,33 +42,33 @@ export default function NewContraPage() {
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <h1 className="text-2xl font-bold text-white">Contra (Cash ⇄ Bank)</h1>
-      <div className="space-y-4 rounded-xl border border-navy-100/20 bg-navy-400/80 p-6">
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Contra (Cash ⇄ Bank)</h1>
+      <div className="space-y-4 rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-6">
         <div>
-          <label className="block text-sm text-slate-400">Date</label>
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white" />
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Date</label>
+          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white" />
         </div>
         <div>
-          <label className="block text-sm text-slate-400">Transfer</label>
-          <select value={type} onChange={(e) => setType(e.target.value as "CashToBank" | "BankToCash")} className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white">
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Transfer</label>
+          <select value={type} onChange={(e) => setType(e.target.value as "CashToBank" | "BankToCash")} className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white">
             <option value="CashToBank">Cash to Bank</option>
             <option value="BankToCash">Bank to Cash</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm text-slate-400">Amount (₹)</label>
-          <input type="number" min={0} step={0.01} value={amount || ""} onChange={(e) => setAmount(parseFloat(e.target.value) || 0)} className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white font-number" />
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Amount (₹)</label>
+          <input type="number" min={0} step={0.01} value={amount || ""} onChange={(e) => setAmount(parseFloat(e.target.value) || 0)} className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white font-number" />
         </div>
         <div>
-          <label className="block text-sm text-slate-400">Cash ledger</label>
-          <select value={cashLedgerId} onChange={(e) => setCashLedgerId(e.target.value)} className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white">
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Cash ledger</label>
+          <select value={cashLedgerId} onChange={(e) => setCashLedgerId(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white">
             <option value="">Select</option>
             {cashLedgers.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-sm text-slate-400">Bank ledger</label>
-          <select value={bankLedgerId} onChange={(e) => setBankLedgerId(e.target.value)} className="mt-1 w-full rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white">
+          <label className="block text-sm text-slate-500 dark:text-slate-400">Bank ledger</label>
+          <select value={bankLedgerId} onChange={(e) => setBankLedgerId(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white">
             <option value="">Select</option>
             {bankLedgers.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
           </select>

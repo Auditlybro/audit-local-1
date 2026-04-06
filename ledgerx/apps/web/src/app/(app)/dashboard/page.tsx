@@ -41,8 +41,8 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-        <p className="mt-1 text-slate-400">Overview of your business</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+        <p className="mt-1 text-slate-500 dark:text-slate-400">Overview of your business</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -51,13 +51,13 @@ export default function DashboardPage() {
           return (
             <div
               key={card.title}
-              className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-4"
+              className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-4"
             >
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-400">{card.title}</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400">{card.title}</span>
                 <Icon className={`h-5 w-5 ${card.color}`} />
               </div>
-              <p className="mt-2 text-xl font-semibold font-number text-white">
+              <p className="mt-2 text-xl font-semibold font-number text-slate-900 dark:text-white">
                 <AmountDisplay amount={card.value} />
               </p>
             </div>
@@ -66,8 +66,8 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-4">
-          <h2 className="font-semibold text-white flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-4">
+          <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-gold" />
             Sales vs Purchase (last 6 months)
           </h2>
@@ -75,8 +75,8 @@ export default function DashboardPage() {
             Chart placeholder — connect reports API
           </div>
         </div>
-        <div className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-4">
-          <h2 className="font-semibold text-white flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-4">
+          <h2 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-gold" />
             Cash flow trend
           </h2>
@@ -103,13 +103,13 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-4">
-          <h2 className="font-semibold text-white">Recent vouchers</h2>
+        <div className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-4">
+          <h2 className="font-semibold text-slate-900 dark:text-white">Recent vouchers</h2>
           <ul className="mt-3 space-y-2">
             {(vouchers as { id: string; number: string; voucher_type: string; date: string; amount: number }[] | undefined)?.slice(0, 5).map((v) => (
               <li
                 key={v.id}
-                className="flex justify-between text-sm text-slate-300"
+                className="flex justify-between text-sm text-slate-600 dark:text-slate-300"
               >
                 <span>{v.number || v.voucher_type} — {v.date}</span>
                 <AmountDisplay amount={v.amount} className="text-slate-200" />
@@ -122,19 +122,19 @@ export default function DashboardPage() {
             View all →
           </Link>
         </div>
-        <div className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-4">
-          <h2 className="font-semibold text-white">Top 5 debtors</h2>
+        <div className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-4">
+          <h2 className="font-semibold text-slate-900 dark:text-white">Top 5 debtors</h2>
           <p className="mt-3 text-sm text-slate-500">— Connect outstanding API</p>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-4">
-          <h2 className="font-semibold text-white">GST filing deadlines</h2>
+        <div className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-4">
+          <h2 className="font-semibold text-slate-900 dark:text-white">GST filing deadlines</h2>
           <p className="mt-3 text-sm text-slate-500">— Connect GST dashboard API</p>
         </div>
-        <div className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-4">
-          <h2 className="font-semibold text-white">Low stock alerts</h2>
+        <div className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-4">
+          <h2 className="font-semibold text-slate-900 dark:text-white">Low stock alerts</h2>
           <p className="mt-3 text-sm text-slate-500">— Connect stock summary API</p>
         </div>
       </div>

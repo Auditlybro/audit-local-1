@@ -103,6 +103,18 @@ export const authApi = {
       refresh_token: string;
       expires_in: number;
     }>("/auth/google", body),
+  apple: (body: { credential: string }) =>
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/apple", body),
+  microsoft: (body: { credential: string }) =>
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/microsoft", body),
 };
 
 // --- Companies ---

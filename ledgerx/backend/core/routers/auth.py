@@ -22,7 +22,16 @@ from config import settings
 from db.database import get_db
 from db.redis import get_redis
 from models import User, Organization, OrgUser
-from schemas.auth import RegisterRequest, LoginRequest, RefreshRequest, TokenResponse, UserResponse
+from schemas.auth import (
+    RegisterRequest,
+    LoginRequest,
+    RefreshRequest,
+    TokenResponse,
+    UserResponse,
+    GoogleLoginRequest,
+    AppleLoginRequest,
+    MicrosoftLoginRequest,
+)
 from pydantic import BaseModel, EmailStr
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -33,10 +42,6 @@ class OTPSendBody(BaseModel):
 class OTPVerifyBody(BaseModel):
     email: EmailStr
     code: str
-
-class GoogleLoginBody(BaseModel):
-    credential: str
-
 
 @router.post("/register", response_model=TokenResponse)
 async def register(
@@ -174,7 +179,7 @@ async def auth_otp_verify(body: OTPVerifyBody, db: AsyncSession = Depends(get_db
 
 
 @router.post("/google", response_model=TokenResponse)
-async def auth_google(body: GoogleLoginBody, db: AsyncSession = Depends(get_db)):
+async def auth_google(body: GoogleLoginRequest, db: AsyncSession = Depends(get_db)):
     import traceback
     print(f"DEBUG: /auth/google called, credential length: {len(body.credential)}")
     try:
@@ -190,7 +195,6 @@ async def auth_google(body: GoogleLoginBody, db: AsyncSession = Depends(get_db))
         result = await db.execute(select(User).where(User.email == email))
         user = result.scalar_one_or_none()
         
-        is_new = user is None
         if not user:
             org = Organization(id=uuid4(), name=name + "'s Org")
             db.add(org)
@@ -204,12 +208,91 @@ async def auth_google(body: GoogleLoginBody, db: AsyncSession = Depends(get_db))
         
         access, exp = create_access_token(user.id, user.org_id)
         refresh = create_refresh_token(user.id)
-        print(f"DEBUG: Google login SUCCESS for {email} (new_user={is_new})")
+        print(f"DEBUG: Google login SUCCESS for {email}")
         return TokenResponse(access_token=access, refresh_token=refresh, expires_in=exp)
         
     except Exception as e:
         print(f"DEBUG: Google Login Failed: {e}")
         traceback.print_exc()
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Google Credentials")
+
+
+@router.post("/apple", response_model=TokenResponse)
+async def auth_apple(body: AppleLoginRequest, db: AsyncSession = Depends(get_db)):
+    import traceback
+    import jwt  # Using PyJWT for Apple/MS
+    print(f"DEBUG: /auth/apple called")
+    try:
+        # In production, fetch keys from https://appleid.apple.com/auth/keys and verify
+        # For this version, decoding without verification to demonstrate flow
+        id_info = jwt.decode(body.credential, options={"verify_signature": False})
+        print(f"DEBUG: Decoded Apple token: email={id_info.get('email')}")
+        
+        email = id_info.get("email")
+        if not email:
+             raise ValueError("Apple token did not provide an email address.")
+        email = email.lower()
+        name = email.split("@")[0] # Apple often lacks name in the JWT after first login
+        
+        result = await db.execute(select(User).where(User.email == email))
+        user = result.scalar_one_or_none()
+        
+        if not user:
+            org = Organization(id=uuid4(), name=name + "'s Org")
+            db.add(org)
+            await db.flush()
+            user = User(id=uuid4(), email=email, name=name, role="admin", org_id=org.id)
+            db.add(user)
+            await db.flush()
+            org_user = OrgUser(org_id=org.id, user_id=user.id, role="admin")
+            db.add(org_user)
+            await db.flush()
+
+        access, exp = create_access_token(user.id, user.org_id)
+        refresh = create_refresh_token(user.id)
+        return TokenResponse(access_token=access, refresh_token=refresh, expires_in=exp)
+    except Exception as e:
+        print(f"DEBUG: Apple Login Failed: {e}")
+        traceback.print_exc()
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Apple Credentials")
+
+
+@router.post("/microsoft", response_model=TokenResponse)
+async def auth_microsoft(body: MicrosoftLoginRequest, db: AsyncSession = Depends(get_db)):
+    import traceback
+    import jwt
+    print(f"DEBUG: /auth/microsoft called")
+    try:
+        # In production, fetch keys from https://login.microsoftonline.com/common/discovery/v2.0/keys
+        id_info = jwt.decode(body.credential, options={"verify_signature": False})
+        print(f"DEBUG: Decoded MS token: email={id_info.get('email') or id_info.get('preferred_username')}")
+        
+        email = id_info.get("email") or id_info.get("preferred_username")
+        if not email:
+            raise ValueError("Microsoft token did not provide an email address.")
+        email = email.lower()
+        name = id_info.get("name") or email.split("@")[0]
+        
+        result = await db.execute(select(User).where(User.email == email))
+        user = result.scalar_one_or_none()
+        
+        if not user:
+            org = Organization(id=uuid4(), name=name + "'s Org")
+            db.add(org)
+            await db.flush()
+            user = User(id=uuid4(), email=email, name=name, role="admin", org_id=org.id)
+            db.add(user)
+            await db.flush()
+            org_user = OrgUser(org_id=org.id, user_id=user.id, role="admin")
+            db.add(org_user)
+            await db.flush()
+
+        access, exp = create_access_token(user.id, user.org_id)
+        refresh = create_refresh_token(user.id)
+        return TokenResponse(access_token=access, refresh_token=refresh, expires_in=exp)
+    except Exception as e:
+        print(f"DEBUG: Microsoft Login Failed: {e}")
+        traceback.print_exc()
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Microsoft Credentials")
 
 

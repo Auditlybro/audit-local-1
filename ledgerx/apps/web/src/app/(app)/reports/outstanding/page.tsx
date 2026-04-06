@@ -27,16 +27,16 @@ export default function OutstandingPage() {
   return (
     <ReportWrapper title="Outstanding" onExportExcel={() => {}} onExportPdf={() => {}} onPrint={() => window.print()}>
       <div className="flex gap-2 mb-4">
-        <button type="button" onClick={() => setTab("receivables")} className={`rounded-lg px-4 py-2 text-sm ${tab === "receivables" ? "bg-gold text-navy" : "bg-navy-100/30 text-slate-400"}`}>Receivables</button>
-        <button type="button" onClick={() => setTab("payables")} className={`rounded-lg px-4 py-2 text-sm ${tab === "payables" ? "bg-gold text-navy" : "bg-navy-100/30 text-slate-400"}`}>Payables</button>
+        <button type="button" onClick={() => setTab("receivables")} className={`rounded-lg px-4 py-2 text-sm ${tab === "receivables" ? "bg-gold text-navy" : "bg-slate-100 dark:bg-navy-100/30 text-slate-500 dark:text-slate-400"}`}>Receivables</button>
+        <button type="button" onClick={() => setTab("payables")} className={`rounded-lg px-4 py-2 text-sm ${tab === "payables" ? "bg-gold text-navy" : "bg-slate-100 dark:bg-navy-100/30 text-slate-500 dark:text-slate-400"}`}>Payables</button>
       </div>
       <p className="text-slate-500 text-sm mb-4">Ageing: 0-30 | 30-60 | 60-90 | 90+ days (connect to API)</p>
-      <div className="rounded-xl border border-navy-100/20 overflow-hidden">
+      <div className="rounded-xl border border-slate-200 dark:border-navy-100/20 overflow-hidden">
         <table className="w-full text-sm">
-          <thead><tr className="border-b border-navy-100/20 bg-navy-100/20"><th className="px-4 py-3 text-left text-slate-400">Party</th><th className="px-4 py-3 text-right text-slate-400">Amount</th></tr></thead>
+          <thead><tr className="border-b border-slate-200 dark:border-navy-100/20 bg-slate-100 dark:bg-navy-100/20"><th className="px-4 py-3 text-left text-slate-500 dark:text-slate-400">Party</th><th className="px-4 py-3 text-right text-slate-500 dark:text-slate-400">Amount</th></tr></thead>
           <tbody>
             {items.map((item, i) => (
-              <tr key={i} className="border-b border-navy-100/10"><td className="px-4 py-2 text-slate-200">{item.name}</td><td className="px-4 py-2 text-right font-number"><AmountDisplay amount={item.amount} /></td></tr>
+              <tr key={i} className="border-b border-slate-200 dark:border-navy-100/10"><td className="px-4 py-2 text-slate-200">{item.name}</td><td className="px-4 py-2 text-right font-number"><AmountDisplay amount={item.amount} /></td></tr>
             ))}
           </tbody>
         </table>

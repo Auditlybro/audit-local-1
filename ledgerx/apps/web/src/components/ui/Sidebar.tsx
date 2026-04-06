@@ -23,6 +23,7 @@ import {
   ChevronRight,
   ChevronLeft,
   Loader2,
+  Settings,
 } from "lucide-react";
 
 const navSections = [
@@ -122,11 +123,11 @@ export function Sidebar() {
   return (
     <aside
       className={clsx(
-        "flex flex-col bg-navy-400 border-r border-navy-100/20 text-slate-200 transition-all duration-200",
+        "flex flex-col bg-white dark:bg-navy-400 border-r border-slate-200 dark:border-navy-100/20 text-slate-200 transition-all duration-200",
         collapsed ? "w-[72px]" : "w-64",
       )}
     >
-      <div className={clsx("flex h-14 items-center border-b border-navy-100/20", collapsed ? "justify-center px-2" : "justify-between px-3")}>
+      <div className={clsx("flex h-14 items-center border-b border-slate-200 dark:border-navy-100/20", collapsed ? "justify-center px-2" : "justify-between px-3")}>
         {!collapsed && (
           <Link
             href="/dashboard"
@@ -144,7 +145,7 @@ export function Sidebar() {
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          className="p-2 rounded hover:bg-navy-100/30 text-slate-400"
+          className="p-2 rounded hover:bg-slate-100 dark:bg-navy-100/30 text-slate-500 dark:text-slate-400"
           aria-label={collapsed ? "Expand" : "Collapse"}
         >
           {collapsed ? (
@@ -174,7 +175,7 @@ export function Sidebar() {
                 ))}
             </button>
             {(openSections[section.title] !== false || collapsed) &&
-              section.items.map((item: any) => {
+              section.items.map((item: { href: string; label: string; icon: React.ElementType; exact?: boolean }) => {
                 const isActive = item.exact
                   ? pathname === item.href
                   : pathname === item.href ||
@@ -201,7 +202,7 @@ export function Sidebar() {
                       "flex items-center gap-2 px-3 py-2 mx-2 rounded-md text-sm transition-colors",
                       isActive
                         ? "bg-gold/20 text-gold"
-                        : "text-slate-300 hover:bg-navy-100/30 hover:text-white",
+                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:bg-navy-100/30 hover:text-slate-900 dark:text-white",
                       collapsed && "justify-center px-2",
                       isNavigating && "opacity-90",
                     )}
@@ -222,6 +223,33 @@ export function Sidebar() {
           </div>
         ))}
       </nav>
+      <div className="border-t border-slate-200 dark:border-navy-100/20 p-2">
+        <Link
+          href="/settings"
+          onClick={() => {
+            if (pathname !== "/settings") {
+              setPendingHref("/settings");
+              setIsNavigating(true);
+            }
+          }}
+          className={clsx(
+            "flex items-center p-2 rounded-md transition-colors",
+            collapsed ? "justify-center" : "gap-2 w-full",
+            pathname === "/settings"
+              ? "bg-gold/20 text-gold"
+              : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-100/30",
+            pendingHref === "/settings" && "opacity-90"
+          )}
+          title={collapsed ? "Settings" : undefined}
+        >
+          {pendingHref === "/settings" ? (
+            <Loader2 className="w-5 h-5 shrink-0 animate-spin text-gold" aria-hidden />
+          ) : (
+            <Settings className="w-5 h-5 shrink-0" />
+          )}
+          {!collapsed && <span className="text-sm font-medium">Settings</span>}
+        </Link>
+      </div>
     </aside>
   );
 }

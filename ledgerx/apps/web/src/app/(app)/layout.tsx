@@ -28,26 +28,26 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-navy">
-        <div className="text-slate-400">Loading…</div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy">
+        <div className="text-slate-500 dark:text-slate-400">Loading…</div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-navy">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-navy">
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopBar />
         <main className="flex-1 overflow-y-auto p-4 md:p-6 relative">
           {isNavigating && (
-            <div className="absolute inset-0 bg-navy/50 z-50 flex items-center justify-center backdrop-blur-sm">
+            <div className="absolute inset-0 bg-slate-50 dark:bg-navy/50 z-50 flex items-center justify-center backdrop-blur-sm">
               <div className="flex flex-col items-center gap-3">
                 <div
                   className="h-8 w-8 animate-spin rounded-full border-2 border-gold border-t-transparent"
                   aria-hidden
                 />
-                <p className="text-slate-400">Loading…</p>
+                <p className="text-slate-500 dark:text-slate-400">Loading…</p>
               </div>
             </div>
           )}

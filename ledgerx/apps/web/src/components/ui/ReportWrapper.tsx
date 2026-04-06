@@ -38,7 +38,7 @@ export function ReportWrapper({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-xl font-semibold text-white">{title}</h1>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{title}</h1>
         <div className="flex flex-wrap items-center gap-2">
           {mode === "range" && onFromChange && onToChange && (
             <div className="flex items-center gap-2">
@@ -46,14 +46,14 @@ export function ReportWrapper({
                 type="date"
                 value={format(fromDate, "yyyy-MM-dd")}
                 onChange={(e) => onFromChange(new Date(e.target.value))}
-                className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-sm text-white"
+                className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-sm text-slate-900 dark:text-white"
               />
-              <span className="text-slate-400">to</span>
+              <span className="text-slate-500 dark:text-slate-400">to</span>
               <input
                 type="date"
                 value={format(toDate, "yyyy-MM-dd")}
                 onChange={(e) => onToChange(new Date(e.target.value))}
-                className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-sm text-white"
+                className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-sm text-slate-900 dark:text-white"
               />
             </div>
           )}
@@ -62,14 +62,14 @@ export function ReportWrapper({
               type="date"
               value={format(singleDate, "yyyy-MM-dd")}
               onChange={(e) => onSingleDateChange(new Date(e.target.value))}
-              className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-sm text-white"
+              className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-sm text-slate-900 dark:text-white"
             />
           )}
           {onExportExcel && (
             <button
               type="button"
               onClick={onExportExcel}
-              className="flex items-center gap-2 rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-sm text-slate-200 hover:bg-navy-100/30"
+              className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-sm text-slate-200 hover:bg-slate-100 dark:bg-navy-100/30"
             >
               <FileSpreadsheet className="w-4 h-4" /> Excel
             </button>
@@ -78,7 +78,7 @@ export function ReportWrapper({
             <button
               type="button"
               onClick={onExportPdf}
-              className="flex items-center gap-2 rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-sm text-slate-200 hover:bg-navy-100/30"
+              className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-sm text-slate-200 hover:bg-slate-100 dark:bg-navy-100/30"
             >
               <Download className="w-4 h-4" /> PDF
             </button>
@@ -87,7 +87,7 @@ export function ReportWrapper({
             <button
               type="button"
               onClick={onPrint}
-              className="flex items-center gap-2 rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-sm text-slate-200 hover:bg-navy-100/30"
+              className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-sm text-slate-200 hover:bg-slate-100 dark:bg-navy-100/30"
             >
               <Printer className="w-4 h-4" /> Print
             </button>

@@ -15,10 +15,10 @@ export default function AuthError({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-navy-500 p-6">
-      <div className="rounded-2xl border border-navy-100/20 bg-navy-400/80 p-8 shadow-xl max-w-md w-full text-center">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-500 p-6">
+      <div className="rounded-2xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-8 shadow-xl max-w-md w-full text-center">
         <h2 className="text-xl font-bold text-gold">Sign-in error</h2>
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
           {error?.message || "Something went wrong. Check the backend is running (port 8001)."}
         </p>
         <div className="mt-6 flex flex-col gap-2">
@@ -31,7 +31,7 @@ export default function AuthError({
           </button>
           <Link
             href="/login"
-            className="block w-full rounded-lg border border-navy-100/30 py-2.5 text-sm text-slate-300 hover:bg-navy-300"
+            className="block w-full rounded-lg border border-slate-200 dark:border-navy-100/30 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:bg-navy-300"
           >
             Back to login
           </Link>

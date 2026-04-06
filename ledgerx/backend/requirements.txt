@@ -10,3 +10,5 @@ google-auth
 python-jose[cryptography]
 passlib[bcrypt]
 pydantic-settings
+PyJWT[crypto]>=2.8.0
+requests>=2.31.0

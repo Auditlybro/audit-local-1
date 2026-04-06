@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import clsx from "clsx";
+import { Logo } from "@/components/brand/Logo";
 import {
   LayoutDashboard,
   BookOpen,
@@ -64,7 +65,7 @@ const navSections = [
   {
     title: "GST & Banking",
     items: [
-      { href: "/gst/dashboard", label: "GST Dashboard", icon: FileSpreadsheet },
+      { href: "/gst/dashboard", label: "GST calendar", icon: FileSpreadsheet },
       { href: "/gst/gstr1", label: "GSTR-1", icon: FileText },
       { href: "/gst/gstr3b", label: "GSTR-3B", icon: FileText },
       { href: "/gst/reconciliation", label: "Reconciliation", icon: BarChart3 },
@@ -106,16 +107,26 @@ export function Sidebar() {
         collapsed ? "w-[72px]" : "w-64"
       )}
     >
-      <div className="flex h-14 items-center justify-between px-3 border-b border-navy-100/20">
-        {!collapsed && (
-          <Link href="/dashboard" className="font-semibold text-gold flex items-center gap-2">
-            <span className="text-xl">L</span> LedgerX
-          </Link>
+      <div
+        className={clsx(
+          "flex border-b border-navy-100/20 px-2",
+          collapsed ? "flex-col items-center gap-1 py-2 min-h-[3.5rem]" : "h-14 items-center justify-between px-3"
         )}
+      >
+        <Link
+          href="/dashboard"
+          className={clsx("flex items-center min-w-0", collapsed && "justify-center")}
+        >
+          {collapsed ? (
+            <Logo variant="mark" size="sm" />
+          ) : (
+            <Logo variant="full" size="md" />
+          )}
+        </Link>
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          className="p-2 rounded hover:bg-navy-100/30 text-slate-400"
+          className="p-2 rounded hover:bg-navy-100/30 text-slate-400 shrink-0"
           aria-label={collapsed ? "Expand" : "Collapse"}
         >
           {collapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronDown className="w-5 h-5 rotate-[-90deg]" />}

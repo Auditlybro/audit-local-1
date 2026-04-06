@@ -49,3 +49,30 @@ class GstNoticeResponse(BaseModel):
 
 class DraftReplyRequest(BaseModel):
     reply_text: str
+
+
+class GstCalendarItem(BaseModel):
+    return_type: str
+    period: str
+    due_date: str
+    title: str
+    description: str
+    filed: bool
+    status: str  # green | amber | red
+
+
+class GstComplianceSection(BaseModel):
+    start: str
+    end: str
+    items: list[GstCalendarItem]
+
+
+class GstComplianceSummary(BaseModel):
+    today: str
+    this_week: GstComplianceSection
+    this_month: GstComplianceSection
+
+
+class MarkGstReturnFiled(BaseModel):
+    return_type: str
+    period: str

@@ -17,6 +17,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "LedgerX — Accounting for Indian CAs & SMEs",
   description: "Full-stack accounting platform",
+  icons: {
+    icon: [{ url: "/logo.svg", type: "image/svg+xml" }],
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans antialiased bg-navy text-slate-200 min-h-screen`}>
+      <body
+        className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans antialiased bg-navy text-slate-200 min-h-screen`}
+        suppressHydrationWarning
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

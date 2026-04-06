@@ -3,6 +3,7 @@ fastapi>=0.100
 sqlalchemy>=2
 asyncpg
 redis
+celery>=5.3
 python-dotenv
 psycopg2-binary
 openpyxl

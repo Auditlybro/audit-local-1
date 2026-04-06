@@ -36,8 +36,10 @@ services:
     build:
       context: ./ledgerx/backend
       dockerfile: Dockerfile
+    working_dir: /app
     command: celery -A worker.celery_app worker --loglevel=info
     environment:
+      PYTHONPATH: /app
       DATABASE_URL: postgresql://ledgerx:ledgerx@postgres:5432/ledgerx
       CELERY_BROKER_URL: redis://redis:6379/1
       CELERY_RESULT_BACKEND: redis://redis:6379/2

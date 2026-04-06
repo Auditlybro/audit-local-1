@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { authApi, companiesApi } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
 import { GSTINInput } from "@/components/ui/GSTINInput";
+import { Logo } from "@/components/brand/Logo";
 
 const STEPS = [
   "Personal info",
@@ -71,9 +72,9 @@ export default function RegisterPage() {
 
   return (
     <div className="rounded-2xl border border-navy-100/20 bg-navy-400/80 p-8 shadow-xl">
-      <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-gold">LedgerX</h1>
-        <p className="mt-1 text-sm text-slate-400">Company setup wizard</p>
+      <div className="mb-6 flex flex-col items-center text-center">
+        <Logo variant="full" size="lg" className="justify-center" />
+        <p className="mt-4 text-sm text-slate-400">Company setup wizard</p>
         <div className="mt-4 flex justify-center gap-1">
           {STEPS.map((_, i) => (
             <div

@@ -8,19 +8,16 @@ import csv
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-try:
-    from core.models import ImportSession, Voucher, VoucherEntry, Ledger, Company
-except ImportError:
-    from models import ImportSession, Voucher, VoucherEntry, Ledger, Company
-from core.utils.tally_parser import parse_tally_xml, parse_tally_masters
-from core.services.marg_parser import parse_marg_csv as _parse_marg_csv
-from core.services.excel_parser import (
+from models import ImportSession, Voucher, VoucherEntry, Ledger, Company
+from utils.tally_parser import parse_tally_xml, parse_tally_masters
+from services.marg_parser import parse_marg_csv as _parse_marg_csv
+from services.excel_parser import (
     suggest_column_mapping,
     parse_excel_with_mapping,
     parse_csv_with_mapping,
     get_excel_sheet_names,
 )
-from core.services.bank_statement_parser import parse_bank_statement
+from services.bank_statement_parser import parse_bank_statement
 
 
 def parse_tally_xml_content(content: str | bytes) -> list[dict]:

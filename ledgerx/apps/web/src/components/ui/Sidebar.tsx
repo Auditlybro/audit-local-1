@@ -78,7 +78,7 @@ const navSections = [
   {
     title: "GST & Banking",
     items: [
-      { href: "/gst/dashboard", label: "GST Dashboard", icon: FileSpreadsheet },
+      { href: "/gst/dashboard", label: "GST calendar", icon: FileSpreadsheet },
       { href: "/gst/gstr1", label: "GSTR-1", icon: FileText },
       { href: "/gst/gstr3b", label: "GSTR-3B", icon: FileText },
       { href: "/gst/reconciliation", label: "Reconciliation", icon: BarChart3 },
@@ -142,6 +142,17 @@ export function Sidebar() {
             <span className="text-xl">L</span> LedgerX
           </Link>
         )}
+      >
+        <Link
+          href="/dashboard"
+          className={clsx("flex items-center min-w-0", collapsed && "justify-center")}
+        >
+          {collapsed ? (
+            <Logo variant="mark" size="sm" />
+          ) : (
+            <Logo variant="full" size="md" />
+          )}
+        </Link>
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}

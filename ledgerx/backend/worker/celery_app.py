@@ -3,6 +3,7 @@ Celery app for LedgerX background tasks.
 Broker: Redis (default). Progress stored in Redis: task:{task_id}:progress, task:{task_id}:status.
 """
 from celery import Celery
+from celery.schedules import crontab
 import os
 
 broker = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/1")
@@ -22,4 +23,10 @@ app.conf.update(
     enable_utc=True,
     task_track_started=True,
     task_time_limit=3600,
+    beat_schedule={
+        "gst-deadline-reminders-daily": {
+            "task": "worker.tasks.scheduled_gst_reminders",
+            "schedule": crontab(hour=9, minute=0),
+        },
+    },
 )

@@ -19,5 +19,44 @@ services:
     ports:
       - "6379:6379"
 
+  backend:
+    build:
+      context: ./ledgerx/backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://ledgerx:ledgerx@postgres:5432/ledgerx
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+
+  worker:
+    build:
+      context: ./ledgerx/backend
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: celery -A worker.celery_app worker --loglevel=info
+    environment:
+      PYTHONPATH: /app
+      DATABASE_URL: postgresql://ledgerx:ledgerx@postgres:5432/ledgerx
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      - backend
+      - redis
+
+  web:
+    build:
+      context: ./ledgerx/apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:

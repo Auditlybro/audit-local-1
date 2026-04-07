@@ -52,6 +52,13 @@ api.interceptors.response.use(
       }
       clearAndRedirect();
     }
+    // Stale company in localStorage (e.g. DB reset) → stop hammering 404s
+    if (err.response?.status === 404 && typeof window !== "undefined") {
+      const detail = err.response?.data?.detail;
+      if (detail === "Company not found") {
+        useAppStore.getState().setCompanyId(null);
+      }
+    }
     return Promise.reject(err);
   }
 );
@@ -259,10 +266,26 @@ export const reportsApi = {
 };
 
 // --- GST ---
+export type GstCalendarItem = {
+  return_type: string;
+  period: string;
+  due_date: string;
+  title: string;
+  description: string;
+  filed: boolean;
+  status: "green" | "amber" | "red";
+};
+export type GstComplianceSection = { start: string; end: string; items: GstCalendarItem[] };
+export type GstComplianceSummary = { today: string; this_week: GstComplianceSection; this_month: GstComplianceSection };
 export const gstApi = {
   gstr1: (companyId: string, period: string) => api.get(`/companies/${companyId}/gst/gstr1`, { params: { period } }),
   gstr3b: (companyId: string, period: string) => api.get(`/companies/${companyId}/gst/gstr3b`, { params: { period } }),
   notices: (companyId: string) => api.get(`/companies/${companyId}/gst/notices`),
+  calendar: (companyId: string, params?: { from?: string; to?: string }) =>
+    api.get<GstCalendarItem[]>(`/companies/${companyId}/gst/calendar`, { params }),
+  complianceSummary: (companyId: string) => api.get<GstComplianceSummary>(`/companies/${companyId}/gst/compliance-summary`),
+  markFiled: (companyId: string, body: { return_type: string; period: string }) =>
+    api.post(`/companies/${companyId}/gst/returns/mark-filed`, body),
 };
 
 // --- Banking ---

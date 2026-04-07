@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev:web": "cd ledgerx/apps/web && npm run dev",
-    "dev:backend": "cd ledgerx/backend && python -m uvicorn main:app --reload --host 127.0.0.1 --port 8001",
+    "dev:backend": "cd ledgerx/backend/core && python -m uvicorn main:app --reload --host 127.0.0.1 --port 8001",
     "dev:desktop": "cd ledgerx/apps/desktop && npm run tauri dev",
     "dev:mobile": "cd ledgerx/apps/mobile && npm start",
     "dev:all": "concurrently -n web,backend -c blue,green \"npm run dev:web\" \"npm run dev:backend\"",

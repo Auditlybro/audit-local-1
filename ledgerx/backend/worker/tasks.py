@@ -99,10 +99,54 @@ def send_invoice_whatsapp(self, voucher_id: str, phone: str):
 
 @app.task
 def scheduled_gst_reminders():
-    """Run daily: check filing deadlines, send alerts."""
+    """Run daily (Celery Beat): pending GST obligations in next 7 days — log email/WhatsApp placeholders."""
+    import asyncio
+    from datetime import date, timedelta
+
+    from sqlalchemy import select
+
+    from core.db.database import AsyncSessionLocal
+    from core.models import Company, GstReturn
+    from core.services.gst_calendar import obligations_in_due_range, urgency_status
+
+    async def _run():
+        today = date.today()
+        d1 = today + timedelta(days=7)
+        reminders = 0
+        async with AsyncSessionLocal() as db:
+            result = await db.execute(select(Company))
+            companies = result.scalars().all()
+            for company in companies:
+                obs = obligations_in_due_range(today, d1)
+                if not obs:
+                    continue
+                types = {o.return_type for o in obs}
+                periods = {o.period for o in obs}
+                r2 = await db.execute(
+                    select(GstReturn).where(
+                        GstReturn.company_id == company.id,
+                        GstReturn.return_type.in_(types),
+                        GstReturn.period.in_(periods),
+                    )
+                )
+                by_key = {(r.return_type, r.period): r for r in r2.scalars().all()}
+                for o in obs:
+                    row = by_key.get((o.return_type, o.period))
+                    filed = bool(row and (row.filed_at is not None or row.status == "filed"))
+                    if filed:
+                        continue
+                    st = urgency_status(filed=False, due_date=o.due_date, today=today)
+                    if st in ("red", "amber"):
+                        reminders += 1
+                        # Placeholders: wire SendGrid / WhatsApp Business API
+                        print(
+                            f"[gst-reminder] company_id={company.id} {o.return_type} period={o.period} "
+                            f"due={o.due_date.isoformat()} urgency={st}"
+                        )
+        return {"ok": True, "reminders_logged": reminders, "companies_checked": len(companies)}
+
     try:
-        # Placeholder: load companies, check GSTR-1/3B due dates, send notifications
-        return {"ok": True, "checked": 0}
+        return asyncio.run(_run())
     except Exception as e:
         return {"ok": False, "error": str(e)}
 

@@ -1,6 +1,7 @@
-"""GST: GSTR1, GSTR3B, reconcile 2B, notices."""
+"""GST: GSTR1, GSTR3B, reconcile 2B, notices, calendar."""
+import calendar
+from datetime import date, datetime, timedelta, timezone
 from uuid import UUID
-from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
@@ -9,9 +10,135 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from auth.dependencies import get_company_for_user
 from db.database import get_db
 from models import Company, GstNotice, GstReturn
-from schemas.gst import GstNoticeCreate, GstNoticeResponse, DraftReplyRequest
+from schemas.gst import (
+    DraftReplyRequest,
+    GstCalendarItem,
+    GstComplianceSection,
+    GstComplianceSummary,
+    GstNoticeCreate,
+    GstNoticeResponse,
+    MarkGstReturnFiled,
+)
+from services.gst_calendar import obligations_in_due_range, urgency_status
 
 router = APIRouter(tags=["gst"])
+
+
+async def _calendar_items(
+    company_id: UUID,
+    d0: date,
+    d1: date,
+    db: AsyncSession,
+) -> list[GstCalendarItem]:
+    obligations = obligations_in_due_range(d0, d1)
+    if not obligations:
+        return []
+    types = {o.return_type for o in obligations}
+    periods = {o.period for o in obligations}
+    result = await db.execute(
+        select(GstReturn).where(
+            GstReturn.company_id == company_id,
+            GstReturn.return_type.in_(types),
+            GstReturn.period.in_(periods),
+        )
+    )
+    rows = result.scalars().all()
+    by_key = {(r.return_type, r.period): r for r in rows}
+    today = date.today()
+    items: list[GstCalendarItem] = []
+    for o in obligations:
+        r = by_key.get((o.return_type, o.period))
+        filed = bool(r and (r.filed_at is not None or r.status == "filed"))
+        st = urgency_status(filed=filed, due_date=o.due_date, today=today)
+        items.append(
+            GstCalendarItem(
+                return_type=o.return_type,
+                period=o.period,
+                due_date=o.due_date.isoformat(),
+                title=o.title,
+                description=o.description,
+                filed=filed,
+                status=st,
+            )
+        )
+    return sorted(items, key=lambda x: x.due_date)
+
+
+@router.get("/{company_id}/gst/calendar", response_model=list[GstCalendarItem])
+async def gst_calendar(
+    company: Company = Depends(get_company_for_user),
+    db: AsyncSession = Depends(get_db),
+    from_date: date | None = Query(None, alias="from"),
+    to_date: date | None = Query(None, alias="to"),
+):
+    today = date.today()
+    d0 = from_date or (today - timedelta(days=7))
+    d1 = to_date or (today + timedelta(days=90))
+    if d1 < d0:
+        raise HTTPException(status_code=400, detail="to must be >= from")
+    return await _calendar_items(company.id, d0, d1, db)
+
+
+@router.get("/{company_id}/gst/compliance-summary", response_model=GstComplianceSummary)
+async def gst_compliance_summary(
+    company: Company = Depends(get_company_for_user),
+    db: AsyncSession = Depends(get_db),
+):
+    today = date.today()
+    week_start = today - timedelta(days=today.weekday())
+    week_end = week_start + timedelta(days=6)
+    month_start = date(today.year, today.month, 1)
+    last_mday = calendar.monthrange(today.year, today.month)[1]
+    month_end = date(today.year, today.month, last_mday)
+
+    week_items = await _calendar_items(company.id, week_start, week_end, db)
+    month_items = await _calendar_items(company.id, month_start, month_end, db)
+
+    return GstComplianceSummary(
+        today=today.isoformat(),
+        this_week=GstComplianceSection(
+            start=week_start.isoformat(),
+            end=week_end.isoformat(),
+            items=week_items,
+        ),
+        this_month=GstComplianceSection(
+            start=month_start.isoformat(),
+            end=month_end.isoformat(),
+            items=month_items,
+        ),
+    )
+
+
+@router.post("/{company_id}/gst/returns/mark-filed")
+async def mark_gst_return_filed(
+    body: MarkGstReturnFiled,
+    company: Company = Depends(get_company_for_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(GstReturn).where(
+            GstReturn.company_id == company.id,
+            GstReturn.return_type == body.return_type,
+            GstReturn.period == body.period,
+        )
+    )
+    row = result.scalar_one_or_none()
+    now = datetime.now(timezone.utc)
+    if row:
+        row.filed_at = now
+        row.status = "filed"
+    else:
+        db.add(
+            GstReturn(
+                company_id=company.id,
+                return_type=body.return_type,
+                period=body.period,
+                status="filed",
+                filed_at=now,
+            )
+        )
+    await db.flush()
+    return {"ok": True, "return_type": body.return_type, "period": body.period}
 
 
 @router.get("/{company_id}/gst/gstr1")

@@ -1,6 +1,7 @@
 # LedgerX — Local Development
 # Usage: docker-compose up -d
-# PostgreSQL: localhost:5432  Redis: localhost:6379
+# PostgreSQL: localhost:5433  Redis: localhost:6379
+# Dev only (postgres + redis): docker-compose up -d postgres redis
 
 services:
   postgres:

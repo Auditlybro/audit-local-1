@@ -31,9 +31,8 @@ function RegisterPageContent() {
   const [gstin, setGstin] = useState("");
   const [pan, setPan] = useState("");
   const [stateCode, setStateCode] = useState("");
-  const [fyStart, setFyStart] = useState(4); // April
+  const [fyStart, setFyStart] = useState(4);
   const [importChoice, setImportChoice] = useState<"tally" | "marg" | "skip">("skip");
-
 
   const sendOtp = useMutation({
     mutationFn: () => authApi.otpSend({ email }),
@@ -64,7 +63,7 @@ function RegisterPageContent() {
       }
       const { data: me } = await authApi.me();
       setUser({ id: me.id, email: me.email, name: me.name, role: me.role, org_id: me.org_id });
-      setStep(3); // Skip OTP, go straight to company
+      setStep(3);
     }
   });
 

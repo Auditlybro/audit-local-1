@@ -7,19 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { authApi } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { PublicClientApplication } from "@azure/msal-browser";
-import { MsalProvider } from "@azure/msal-react";
 import AppleSignin from "react-apple-signin-auth";
-
-const msalConfig = {
-  auth: {
-    clientId: process.env.NEXT_PUBLIC_MS_CLIENT_ID || "",
-    authority: "https://login.microsoftonline.com/common",
-    redirectUri: typeof window !== "undefined" ? window.location.origin : "",
-  },
-};
-
-const msalInstance = new PublicClientApplication(msalConfig);
 
 export default function LoginPage() {
   const router = useRouter();
@@ -199,25 +187,44 @@ export default function LoginPage() {
     },
   });
 
-  const handleMsLogin = async () => {
+  const handleMsLogin = () => {
     setMsLoading(true);
-    try {
-      const loginResponse = await msalInstance.loginPopup({
-        scopes: ["user.read", "openid", "profile", "email"],
-      });
-      if (loginResponse.idToken) {
-        msLogin.mutate(loginResponse.idToken);
+    const clientId = process.env.NEXT_PUBLIC_MS_CLIENT_ID || "";
+    const redirectUri = encodeURIComponent(`${window.location.origin}/ms-redirect.html`);
+    const nonce = Math.random().toString(36).substring(2);
+    const scope = encodeURIComponent("openid email profile");
+    const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=id_token&redirect_uri=${redirectUri}&scope=${scope}&response_mode=fragment&nonce=${nonce}`;
+
+    const popup = window.open(authUrl, "ms-login", "width=500,height=700,top=100,left=400");
+    let gotToken = false;
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (event.data?.type !== "ms-auth") return;
+      window.removeEventListener("message", handleMessage);
+      gotToken = true;
+      if (event.data.id_token) {
+        msLogin.mutate(event.data.id_token);
       } else {
+        setErrorMsg(event.data.error || "Microsoft sign-in failed.");
         setMsLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      setMsLoading(false);
-    }
+    };
+    window.addEventListener("message", handleMessage);
+
+    // Handle popup being closed manually (without completing auth)
+    const checkClosed = setInterval(() => {
+      if (popup?.closed) {
+        clearInterval(checkClosed);
+        if (!gotToken) {
+          window.removeEventListener("message", handleMessage);
+          setMsLoading(false);
+        }
+      }
+    }, 500);
   };
 
   return (
-    <MsalProvider instance={msalInstance}>
       <GoogleOAuthProvider
         clientId={
           process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID"
@@ -466,6 +473,5 @@ export default function LoginPage() {
           </p>
         </div>
       </GoogleOAuthProvider>
-    </MsalProvider>
   );
 }

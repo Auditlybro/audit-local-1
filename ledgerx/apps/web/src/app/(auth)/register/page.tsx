@@ -8,19 +8,7 @@ import { authApi, companiesApi } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
 import { GSTINInput } from "@/components/ui/GSTINInput";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { PublicClientApplication } from "@azure/msal-browser";
-import { MsalProvider } from "@azure/msal-react";
 import AppleSignin from "react-apple-signin-auth";
-
-const msalConfig = {
-  auth: {
-    clientId: process.env.NEXT_PUBLIC_MS_CLIENT_ID || "",
-    authority: "https://login.microsoftonline.com/common",
-    redirectUri: typeof window !== "undefined" ? window.location.origin : "",
-  },
-};
-
-const msalInstance = new PublicClientApplication(msalConfig);
 
 const STEPS = [
   "Email Setup",
@@ -108,17 +96,35 @@ function RegisterPageContent() {
     }
   });
 
-  const handleMsLogin = async () => {
-    try {
-      const loginResponse = await msalInstance.loginPopup({
-        scopes: ["user.read", "openid", "profile", "email"],
-      });
-      if (loginResponse.idToken) {
-        msLogin.mutate(loginResponse.idToken);
+  const handleMsLogin = () => {
+    const clientId = process.env.NEXT_PUBLIC_MS_CLIENT_ID || "";
+    const redirectUri = encodeURIComponent(`${window.location.origin}/ms-redirect.html`);
+    const nonce = Math.random().toString(36).substring(2);
+    const scope = encodeURIComponent("openid email profile");
+    const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=id_token&redirect_uri=${redirectUri}&scope=${scope}&response_mode=fragment&nonce=${nonce}`;
+
+    const popup = window.open(authUrl, "ms-login", "width=500,height=700,top=100,left=400");
+    let gotToken = false;
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (event.data?.type !== "ms-auth") return;
+      window.removeEventListener("message", handleMessage);
+      gotToken = true;
+      if (event.data.id_token) {
+        msLogin.mutate(event.data.id_token);
       }
-    } catch (err) {
-      console.error(err);
-    }
+    };
+    window.addEventListener("message", handleMessage);
+
+    const checkClosed = setInterval(() => {
+      if (popup?.closed) {
+        clearInterval(checkClosed);
+        if (!gotToken) {
+          window.removeEventListener("message", handleMessage);
+        }
+      }
+    }, 500);
   };
 
   const finishSetup = useMutation({
@@ -138,7 +144,6 @@ function RegisterPageContent() {
   });
 
   return (
-    <MsalProvider instance={msalInstance}>
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID"}>
       <div className="rounded-2xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-8 shadow-xl max-w-2xl w-full">
         <div className="mb-6 text-center">
@@ -357,7 +362,6 @@ function RegisterPageContent() {
         </p>
       </div>
     </GoogleOAuthProvider>
-    </MsalProvider>
   );
 }
 

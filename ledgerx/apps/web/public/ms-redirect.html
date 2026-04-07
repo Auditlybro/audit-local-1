@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head><title>Signing in...</title></head>
+<body>
+<p style="text-align:center;margin-top:40vh;font-family:sans-serif;color:#888;">Completing sign-in...</p>
+<script>
+  // Microsoft redirects here with the id_token in the URL hash
+  // e.g. #id_token=eyJ...&state=...
+  try {
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const idToken = params.get('id_token');
+    const error = params.get('error');
+    
+    if (idToken && window.opener) {
+      window.opener.postMessage({ type: 'ms-auth', id_token: idToken }, window.location.origin);
+      window.close();
+    } else if (error) {
+      window.opener.postMessage({ type: 'ms-auth', error: params.get('error_description') || error }, window.location.origin);
+      window.close();
+    } else {
+      // Fallback: try query params
+      const searchParams = new URLSearchParams(window.location.search);
+      const tokenFromQuery = searchParams.get('id_token');
+      if (tokenFromQuery && window.opener) {
+        window.opener.postMessage({ type: 'ms-auth', id_token: tokenFromQuery }, window.location.origin);
+        window.close();
+      }
+    }
+  } catch (e) {
+    console.error('Auth redirect error:', e);
+  }
+</script>
+</body>
+</html>

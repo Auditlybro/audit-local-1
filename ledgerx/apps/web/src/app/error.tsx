@@ -14,10 +14,10 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-navy-500 p-6">
-      <div className="rounded-2xl border border-navy-100/20 bg-navy-400/80 p-8 shadow-xl max-w-md w-full text-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-navy-500 p-6">
+      <div className="rounded-2xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-8 shadow-xl max-w-md w-full text-center">
         <h2 className="text-xl font-bold text-gold">Something went wrong</h2>
-        <p className="mt-2 text-sm text-slate-400">
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
           {error?.message || "An error occurred."}
         </p>
         <button

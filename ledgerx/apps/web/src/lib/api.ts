@@ -6,9 +6,7 @@
 
 import axios, { type AxiosInstance } from "axios";
 
-import { useAppStore } from "./store";
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8002";
 
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -67,13 +65,63 @@ api.interceptors.response.use(
 
 // --- Auth ---
 export const authApi = {
-  register: (body: { email: string; name?: string; password: string; org_name?: string }) =>
-    api.post<{ access_token: string; refresh_token: string; expires_in: number }>("/auth/register", body),
+  register: (body: {
+    email: string;
+    name?: string;
+    password: string;
+    org_name?: string;
+  }) =>
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/register", body),
   login: (body: { email: string; password: string }) =>
-    api.post<{ access_token: string; refresh_token: string; expires_in: number }>("/auth/login", body),
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/login", body),
   refresh: (body: { refresh_token: string }) =>
-    api.post<{ access_token: string; refresh_token: string; expires_in: number }>("/auth/refresh", body),
-  me: () => api.get<{ id: string; email: string; name: string | null; role: string; org_id: string | null }>("/auth/me"),
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/refresh", body),
+  me: () =>
+    api.get<{
+      id: string;
+      email: string;
+      name: string | null;
+      role: string;
+      org_id: string | null;
+    }>("/auth/me"),
+  otpSend: (body: { email: string }) =>
+    api.post<{ message: string }>("/auth/otp/send", body),
+  otpVerify: (body: { email: string; code: string }) =>
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/otp/verify", body),
+  google: (body: { credential: string }) =>
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/google", body),
+  apple: (body: { credential: string }) =>
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/apple", body),
+  microsoft: (body: { credential: string }) =>
+    api.post<{
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    }>("/auth/microsoft", body),
 };
 
 // --- Companies ---

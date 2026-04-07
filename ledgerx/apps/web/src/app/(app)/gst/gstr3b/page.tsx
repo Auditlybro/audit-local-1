@@ -17,8 +17,8 @@ export default function Gstr3bPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-white">GSTR-3B</h1>
-      <input type="month" value={period} onChange={(e) => setPeriod(e.target.value)} className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white" />
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">GSTR-3B</h1>
+      <input type="month" value={period} onChange={(e) => setPeriod(e.target.value)} className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white" />
       <p className="text-slate-500">Auto-populated form. Connect to API.</p>
     </div>
   );

@@ -1,6 +1,6 @@
-# LedgerX — one-command startup
-# Usage: docker-compose up
-# Backend: http://localhost:8000  Web: http://localhost:3000
+# LedgerX — Local Development
+# Usage: docker-compose up -d
+# PostgreSQL: localhost:5432  Redis: localhost:6379
 
 services:
   postgres:
@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: ledgerx
       POSTGRES_DB: ledgerx
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

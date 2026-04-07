@@ -48,10 +48,10 @@ export default function VouchersListPage() {
       header: "Actions",
       render: (r: Voucher) => (
         <div className="flex gap-2">
-          <Link href={`/vouchers/${r.id}`} className="text-slate-400 hover:text-gold" title="View"><Eye className="h-4 w-4" /></Link>
-          <button type="button" className="text-slate-400 hover:text-gold" title="Edit"><Pencil className="h-4 w-4" /></button>
-          <button type="button" className="text-slate-400 hover:text-gold" title="Print"><Printer className="h-4 w-4" /></button>
-          <button type="button" className="text-slate-400 hover:text-gold" title="WhatsApp"><MessageCircle className="h-4 w-4" /></button>
+          <Link href={`/vouchers/${r.id}`} className="text-slate-500 dark:text-slate-400 hover:text-gold" title="View"><Eye className="h-4 w-4" /></Link>
+          <button type="button" className="text-slate-500 dark:text-slate-400 hover:text-gold" title="Edit"><Pencil className="h-4 w-4" /></button>
+          <button type="button" className="text-slate-500 dark:text-slate-400 hover:text-gold" title="Print"><Printer className="h-4 w-4" /></button>
+          <button type="button" className="text-slate-500 dark:text-slate-400 hover:text-gold" title="WhatsApp"><MessageCircle className="h-4 w-4" /></button>
         </div>
       ),
     },
@@ -59,24 +59,24 @@ export default function VouchersListPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-white">All Vouchers</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">All Vouchers</h1>
       <div className="flex flex-wrap gap-2">
         <input
           type="date"
           value={fromDate}
           onChange={(e) => setFromDate(e.target.value)}
-          className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+          className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
         />
         <input
           type="date"
           value={toDate}
           onChange={(e) => setToDate(e.target.value)}
-          className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+          className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
         />
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white"
+          className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white"
         >
           <option value="">All types</option>
           <option value="SALES">Sales</option>
@@ -91,7 +91,7 @@ export default function VouchersListPage() {
           placeholder="Search number, narration..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="rounded-lg border border-navy-100/30 bg-navy-400 px-3 py-2 text-white placeholder-slate-500 w-56"
+          className="rounded-lg border border-slate-200 dark:border-navy-100/30 bg-white dark:bg-navy-400 px-3 py-2 text-slate-900 dark:text-white placeholder-slate-500 w-56"
         />
       </div>
       <DataTable

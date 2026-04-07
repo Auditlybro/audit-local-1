@@ -29,11 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans antialiased bg-navy text-slate-200 min-h-screen`}
-        suppressHydrationWarning
-      >
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} font-sans antialiased bg-slate-50 text-slate-900 dark:bg-navy dark:text-slate-200 min-h-screen`}>
         <Providers>{children}</Providers>
       </body>
     </html>

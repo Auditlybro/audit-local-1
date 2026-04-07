@@ -25,3 +25,11 @@ export const useAppStore = create<AppState>()(
     { name: "ledgerx-app" }
   )
 );
+
+export const useNavStore = create<{
+  isNavigating: boolean;
+  setIsNavigating: (v: boolean) => void;
+}>((set) => ({
+  isNavigating: false,
+  setIsNavigating: (isNavigating) => set({ isNavigating }),
+}));

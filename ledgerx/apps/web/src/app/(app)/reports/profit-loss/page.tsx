@@ -23,10 +23,10 @@ export default function ProfitLossPage() {
 
   return (
     <ReportWrapper title="Profit & Loss" fromDate={fromDate} toDate={toDate} onFromChange={setFromDate} onToChange={setToDate} onExportExcel={() => {}} onExportPdf={() => {}} onPrint={() => window.print()}>
-      <div className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-6 max-w-md space-y-4">
-        <div className="flex justify-between"><span className="text-slate-400">Revenue</span><AmountDisplay amount={d?.revenue} /></div>
-        <div className="flex justify-between"><span className="text-slate-400">Expenses</span><AmountDisplay amount={d?.expenses} /></div>
-        <div className="flex justify-between pt-2 border-t border-navy-100/20 font-semibold text-gold">Net Profit<AmountDisplay amount={d?.net_profit} /></div>
+      <div className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-6 max-w-md space-y-4">
+        <div className="flex justify-between"><span className="text-slate-500 dark:text-slate-400">Revenue</span><AmountDisplay amount={d?.revenue} /></div>
+        <div className="flex justify-between"><span className="text-slate-500 dark:text-slate-400">Expenses</span><AmountDisplay amount={d?.expenses} /></div>
+        <div className="flex justify-between pt-2 border-t border-slate-200 dark:border-navy-100/20 font-semibold text-gold">Net Profit<AmountDisplay amount={d?.net_profit} /></div>
       </div>
     </ReportWrapper>
   );

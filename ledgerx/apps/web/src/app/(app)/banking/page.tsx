@@ -17,13 +17,13 @@ export default function BankingPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-white">Bank Accounts</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Bank Accounts</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {(accounts as { id: string; account_number: string; bank_name: string | null; opening_balance: number }[]).map((acc) => (
-          <Link key={acc.id} href={`/banking/${acc.id}`} className="rounded-xl border border-navy-100/20 bg-navy-400/80 p-4 hover:border-gold/30">
+          <Link key={acc.id} href={`/banking/${acc.id}`} className="rounded-xl border border-slate-200 dark:border-navy-100/20 bg-white dark:bg-navy-400/80 p-4 hover:border-gold/30">
             <Landmark className="h-8 w-8 text-gold mb-2" />
-            <p className="font-medium text-white">{acc.bank_name ?? "Bank"}</p>
-            <p className="text-sm text-slate-400">A/c {acc.account_number}</p>
+            <p className="font-medium text-slate-900 dark:text-white">{acc.bank_name ?? "Bank"}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">A/c {acc.account_number}</p>
             <p className="mt-2 font-number text-gold"><AmountDisplay amount={acc.opening_balance} /></p>
           </Link>
         ))}

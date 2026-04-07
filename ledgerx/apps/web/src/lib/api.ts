@@ -1,10 +1,12 @@
 /**
  * Typed API client for LedgerX backend.
- * Base URL: http://localhost:8000
+ * Base URL: http://localhost:8002
  * Auto-attach JWT, 401 → redirect to login
  */
 
 import axios, { type AxiosInstance } from "axios";
+
+import { useAppStore } from "./store";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8002";
 

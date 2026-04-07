@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useNavStore } from "@/lib/store";
+import { Logo } from "@/components/brand/Logo";
 import {
   LayoutDashboard,
   BookOpen,
@@ -55,23 +56,11 @@ const navSections = [
   {
     title: "Reports",
     items: [
-      {
-        href: "/reports/trial-balance",
-        label: "Trial Balance",
-        icon: BarChart3,
-      },
-      {
-        href: "/reports/balance-sheet",
-        label: "Balance Sheet",
-        icon: FileSpreadsheet,
-      },
+      { href: "/reports/trial-balance", label: "Trial Balance", icon: BarChart3 },
+      { href: "/reports/balance-sheet", label: "Balance Sheet", icon: FileSpreadsheet },
       { href: "/reports/profit-loss", label: "Profit & Loss", icon: BarChart3 },
       { href: "/reports/outstanding", label: "Outstanding", icon: BarChart3 },
-      {
-        href: "/reports/sales-register",
-        label: "Sales Register",
-        icon: FileText,
-      },
+      { href: "/reports/sales-register", label: "Sales Register", icon: FileText },
       { href: "/reports/stock-summary", label: "Stock Summary", icon: Package },
     ],
   },
@@ -127,25 +116,21 @@ export function Sidebar() {
         collapsed ? "w-[72px]" : "w-64",
       )}
     >
-      <div className={clsx("flex h-14 items-center border-b border-slate-200 dark:border-navy-100/20", collapsed ? "justify-center px-2" : "justify-between px-3")}>
-        {!collapsed && (
-          <Link
-            href="/dashboard"
-            onClick={() => {
-              if (pathname !== "/dashboard") {
-                setPendingHref("/dashboard");
-                setIsNavigating(true);
-              }
-            }}
-            className="font-semibold text-gold flex items-center gap-2"
-          >
-            <span className="text-xl">L</span> LedgerX
-          </Link>
+      <div 
+        className={clsx(
+          "flex items-center border-b border-slate-200 dark:border-navy-100/20", 
+          collapsed ? "flex-col items-center gap-1 py-2 min-h-[3.5rem]" : "h-14 justify-between px-3"
         )}
       >
         <Link
           href="/dashboard"
-          className={clsx("flex items-center min-w-0", collapsed && "justify-center")}
+          onClick={() => {
+            if (pathname !== "/dashboard") {
+              setPendingHref("/dashboard");
+              setIsNavigating(true);
+            }
+          }}
+          className={clsx("flex items-center min-w-0 flex-1", collapsed && "justify-center")}
         >
           {collapsed ? (
             <Logo variant="mark" size="sm" />
@@ -156,7 +141,7 @@ export function Sidebar() {
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          className="p-2 rounded hover:bg-slate-100 dark:bg-navy-100/30 text-slate-500 dark:text-slate-400"
+          className="p-2 shrink-0 rounded hover:bg-slate-100 dark:hover:bg-navy-100/30 text-slate-500 dark:text-slate-400"
           aria-label={collapsed ? "Expand" : "Collapse"}
         >
           {collapsed ? (
@@ -213,7 +198,7 @@ export function Sidebar() {
                       "flex items-center gap-2 px-3 py-2 mx-2 rounded-md text-sm transition-colors",
                       isActive
                         ? "bg-gold/20 text-gold"
-                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:bg-navy-100/30 hover:text-slate-900 dark:text-white",
+                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-100/30 hover:text-slate-900 dark:hover:text-white",
                       collapsed && "justify-center px-2",
                       isNavigating && "opacity-90",
                     )}

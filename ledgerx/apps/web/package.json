@@ -22,6 +22,7 @@
     "react": "^18",
     "react-apple-signin-auth": "^1.1.2",
     "react-dom": "^18",
+    "react-hot-toast": "^2.6.0",
     "recharts": "^2.13.0",
     "zustand": "^5.0.0"
   },

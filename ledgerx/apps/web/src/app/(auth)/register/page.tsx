@@ -8,11 +8,13 @@ import { authApi, companiesApi } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
 import { GSTINInput } from "@/components/ui/GSTINInput";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-hot-toast";
 import AppleSignin from "react-apple-signin-auth";
 
 const STEPS = [
   "Email Setup",
   "Verify Email",
+  "Profile Setup",
   "Company details",
   "Financial year",
   "Import data?",
@@ -27,6 +29,8 @@ function RegisterPageContent() {
   const [step, setStep] = useState(initialStep);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [gstin, setGstin] = useState("");
   const [pan, setPan] = useState("");
@@ -37,6 +41,10 @@ function RegisterPageContent() {
   const sendOtp = useMutation({
     mutationFn: () => authApi.otpSend({ email }),
     onSuccess: () => setStep(2),
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { detail?: string } } }).response?.data?.detail || "Failed to send OTP";
+      toast.error(msg, { duration: 6000 });
+    }
   });
 
   const verifyOtp = useMutation({
@@ -48,9 +56,47 @@ function RegisterPageContent() {
         localStorage.setItem("refresh_token", refresh_token);
       }
       const { data: me } = await authApi.me();
-      setUser({ id: me.id, email: me.email, name: me.name, role: me.role, org_id: me.org_id });
-      setStep(3);
+      setUser({
+        id: me.id,
+        email: me.email,
+        username: me.username,
+        name: me.name,
+        role: me.role,
+        org_id: me.org_id,
+        profile_setup_needed: me.profile_setup_needed,
+        is_social: me.is_social,
+      });
+      if (me.name) setName(me.name);
+      
+      if (me.profile_setup_needed) setStep(3);
+      else setStep(4);
     },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { detail?: string } } }).response?.data?.detail || "Invalid or expired OTP code";
+      toast.error(msg);
+    }
+  });
+
+  const setupProfile = useMutation({
+    mutationFn: (data: Record<string, unknown>) => authApi.setupProfile(data as { name: string; username?: string; password?: string; org_name?: string }),
+    onSuccess: async (res) => {
+      const me = res.data;
+      setUser({
+        id: me.id,
+        email: me.email,
+        username: me.username,
+        name: me.name,
+        role: me.role,
+        org_id: me.org_id,
+        profile_setup_needed: false,
+        is_social: me.is_social,
+      });
+      setStep(4);
+    },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { detail?: string } } }).response?.data?.detail || "Failed to setup profile";
+      toast.error(msg);
+    }
   });
 
   const googleLogin = useMutation({
@@ -62,8 +108,24 @@ function RegisterPageContent() {
         localStorage.setItem("refresh_token", refresh_token);
       }
       const { data: me } = await authApi.me();
-      setUser({ id: me.id, email: me.email, name: me.name, role: me.role, org_id: me.org_id });
-      setStep(3);
+      setUser({
+        id: me.id,
+        email: me.email,
+        username: me.username,
+        name: me.name,
+        role: me.role,
+        org_id: me.org_id,
+        profile_setup_needed: me.profile_setup_needed,
+        is_social: me.is_social,
+      });
+      if (me.name) setName(me.name);
+      
+      if (me.profile_setup_needed) setStep(3);
+      else setStep(4);
+    },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { detail?: string } } }).response?.data?.detail || "Google Login failed";
+      toast.error(msg);
     }
   });
 
@@ -76,8 +138,24 @@ function RegisterPageContent() {
         localStorage.setItem("refresh_token", refresh_token);
       }
       const { data: me } = await authApi.me();
-      setUser({ id: me.id, email: me.email, name: me.name, role: me.role, org_id: me.org_id });
-      setStep(3);
+      setUser({
+        id: me.id,
+        email: me.email,
+        username: me.username,
+        name: me.name,
+        role: me.role,
+        org_id: me.org_id,
+        profile_setup_needed: me.profile_setup_needed,
+        is_social: me.is_social,
+      });
+      if (me.name) setName(me.name);
+      
+      if (me.profile_setup_needed) setStep(3);
+      else setStep(4);
+    },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { detail?: string } } }).response?.data?.detail || "Apple Login failed";
+      toast.error(msg);
     }
   });
 
@@ -90,8 +168,24 @@ function RegisterPageContent() {
         localStorage.setItem("refresh_token", refresh_token);
       }
       const { data: me } = await authApi.me();
-      setUser({ id: me.id, email: me.email, name: me.name, role: me.role, org_id: me.org_id });
-      setStep(3);
+      setUser({
+        id: me.id,
+        email: me.email,
+        username: me.username,
+        name: me.name,
+        role: me.role,
+        org_id: me.org_id,
+        profile_setup_needed: me.profile_setup_needed,
+        is_social: me.is_social,
+      });
+      if (me.name) setName(me.name);
+      
+      if (me.profile_setup_needed) setStep(3);
+      else setStep(4);
+    },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { detail?: string } } }).response?.data?.detail || "Microsoft Login failed";
+      toast.error(msg);
     }
   });
 
@@ -140,6 +234,10 @@ function RegisterPageContent() {
       if (companies.length > 0) setCompanyId(companies[0].id);
       router.push("/dashboard");
     },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { detail?: string } } }).response?.data?.detail || "Failed to finalize company setup";
+      toast.error(msg);
+    }
   });
 
   return (
@@ -169,7 +267,6 @@ function RegisterPageContent() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-slate-50 dark:bg-navy-300 px-3 py-2 text-slate-900 dark:text-white placeholder-slate-500"
             />
-            {sendOtp.isError && <p className="text-red-400 text-sm">Failed to send OTP. Is the backend working?</p>}
 
             <div className="mt-6 pt-4 border-t border-slate-200 dark:border-navy-100/30 flex flex-col items-center gap-3">
               <span className="text-xs text-slate-500 uppercase tracking-widest mb-1">Or register with</span>
@@ -237,13 +334,39 @@ function RegisterPageContent() {
               className="w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-slate-50 dark:bg-navy-300 px-3 py-3 text-slate-900 dark:text-white placeholder-slate-500 text-center tracking-[1em] text-2xl"
               maxLength={6}
             />
-            {verifyOtp.isError && <p className="text-red-400 text-sm text-center">Invalid or expired code.</p>}
           </div>
         )}
 
         {step === 3 && (
           <div className="space-y-4">
-            <h2 className="font-semibold text-slate-900 dark:text-white">Step 3: Company details</h2>
+            <h2 className="font-semibold text-slate-900 dark:text-white">Step 3: User Profile</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {useAppStore.getState().user?.is_social 
+                ? "Confirm your display name below."
+                : "Set up your identity and password for future logins."}
+            </p>
+            <input
+              type="text"
+              placeholder="Your Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-slate-50 dark:bg-navy-300 px-3 py-2 text-slate-900 dark:text-white placeholder-slate-500"
+            />
+            {!useAppStore.getState().user?.is_social && (
+              <input
+                type="password"
+                placeholder="Create Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-slate-50 dark:bg-navy-300 px-3 py-2 text-slate-900 dark:text-white placeholder-slate-500"
+              />
+            )}
+          </div>
+        )}
+
+        {step === 4 && (
+          <div className="space-y-4">
+            <h2 className="font-semibold text-slate-900 dark:text-white">Step 4: Company details</h2>
             <input
               type="text"
               placeholder="Company name"
@@ -272,9 +395,9 @@ function RegisterPageContent() {
           </div>
         )}
 
-        {step === 4 && (
+        {step === 5 && (
           <div className="space-y-4">
-            <h2 className="font-semibold text-slate-900 dark:text-white">Step 4: Financial year start</h2>
+            <h2 className="font-semibold text-slate-900 dark:text-white">Step 5: Financial year start</h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">Indian financial year is April to March.</p>
             <select
               value={fyStart}
@@ -288,9 +411,9 @@ function RegisterPageContent() {
           </div>
         )}
 
-        {step === 5 && (
+        {step === 6 && (
           <div className="space-y-4">
-            <h2 className="font-semibold text-slate-900 dark:text-white">Step 5: Import existing data?</h2>
+            <h2 className="font-semibold text-slate-900 dark:text-white">Step 6: Import existing data?</h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">You can import later from the Import page.</p>
             <div className="flex gap-2">
               {(["tally", "marg", "skip"] as const).map((opt) => (
@@ -309,11 +432,10 @@ function RegisterPageContent() {
           </div>
         )}
 
-        {step === 6 && (
+        {step === 7 && (
           <div className="space-y-4 text-center">
             <h2 className="font-semibold text-slate-900 dark:text-white">All set!</h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">Click Finish to secure your account and go to the dashboard.</p>
-            {finishSetup.isError && <p className="text-red-400 text-sm">Failed to create initial company profile.</p>}
           </div>
         )}
 
@@ -327,22 +449,32 @@ function RegisterPageContent() {
             Back
           </button>
           
-          {step < 6 ? (
+          {step < 7 ? (
             <button
               type="button"
               onClick={() => {
-                if (step === 1) sendOtp.mutate();
+                if (step === 1) {
+                  sendOtp.mutate();
+                }
                 else if (step === 2) verifyOtp.mutate();
-                else setStep(s => s + 1);
+                else if (step === 3) {
+                  setupProfile.mutate({ 
+                    name, 
+                    password: useAppStore.getState().user?.is_social ? undefined : password, 
+                    org_name: companyName 
+                  });
+                }
+                else setStep(s => s+1);
               }}
               disabled={
                 (step === 1 && (!email || sendOtp.isPending)) ||
                 (step === 2 && (otp.length !== 6 || verifyOtp.isPending)) ||
-                (step === 3 && !companyName)
+                (step === 3 && (!name || (!useAppStore.getState().user?.is_social && !password) || setupProfile.isPending)) ||
+                (step === 4 && !companyName)
               }
               className="rounded-lg bg-gold px-6 py-2 text-sm font-medium text-navy disabled:opacity-50"
             >
-              {sendOtp.isPending || verifyOtp.isPending || googleLogin.isPending ? "Processing…" : "Next"}
+              {sendOtp.isPending || verifyOtp.isPending || googleLogin.isPending || setupProfile.isPending ? "Processing…" : "Next"}
             </button>
           ) : (
             <button

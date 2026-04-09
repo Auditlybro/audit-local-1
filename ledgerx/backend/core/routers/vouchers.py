@@ -14,6 +14,7 @@ from schemas.voucher import VoucherCreate, VoucherUpdate, VoucherResponse, Vouch
 from services.double_entry import validate_entry
 from services.voucher_number import next_voucher_number
 from services.inventory import update_stock, check_stock_availability
+from utils.activity import log_activity
 
 router = APIRouter(tags=["vouchers"])
 
@@ -120,6 +121,13 @@ async def create_voucher(
                 await update_stock(db, ii.stock_item_id, ii.quantity, ii.rate, ii.godown_id, "out")
             elif body.voucher_type in ("PURCHASE", "RECEIPT_NOTE"):
                 await update_stock(db, ii.stock_item_id, ii.quantity, ii.rate, ii.godown_id, "in")
+    
+    await log_activity(
+        db, company.id, current_user.id, "DATA_EDIT",
+        f"Created {voucher.voucher_type} voucher: {voucher.number or voucher.id}",
+        {"voucher_id": str(voucher.id), "voucher_type": voucher.voucher_type, "number": voucher.number, "action": "create"}
+    )
+    
     await db.flush()
     await db.refresh(voucher)
     return _voucher_to_response(voucher)
@@ -164,6 +172,7 @@ async def update_voucher(
     voucher_id: UUID,
     body: VoucherUpdate,
     company: Company = Depends(get_company_for_user),
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
@@ -193,6 +202,13 @@ async def update_voucher(
         for e in body.entries:
             ent = VoucherEntry(voucher_id=v.id, ledger_id=e.ledger_id, dr_amount=e.dr_amount, cr_amount=e.cr_amount, narration=e.narration, bill_ref=e.bill_ref, cost_centre=e.cost_centre)
             db.add(ent)
+    
+    await log_activity(
+        db, company.id, current_user.id, "DATA_EDIT",
+        f"Updated {v.voucher_type} voucher: {v.number or v.id}",
+        {"voucher_id": str(v.id), "voucher_type": v.voucher_type, "number": v.number, "action": "update"}
+    )
+    
     await db.flush()
     await db.refresh(v)
     return _voucher_to_response(v)
@@ -202,6 +218,7 @@ async def update_voucher(
 async def delete_voucher(
     voucher_id: UUID,
     company: Company = Depends(get_company_for_user),
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
@@ -210,6 +227,13 @@ async def delete_voucher(
     v = result.scalar_one_or_none()
     if not v:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Voucher not found")
+    
+    await log_activity(
+        db, company.id, current_user.id, "DATA_EDIT",
+        f"Deleted {v.voucher_type} voucher: {v.number or v.id}",
+        {"voucher_id": str(v.id), "voucher_type": v.voucher_type, "number": v.number, "action": "delete"}
+    )
+    
     await db.delete(v)
     await db.flush()
 
@@ -218,6 +242,7 @@ async def delete_voucher(
 async def cancel_voucher(
     voucher_id: UUID,
     company: Company = Depends(get_company_for_user),
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     from services.double_entry import reverse_voucher
@@ -228,6 +253,13 @@ async def cancel_voucher(
     if not v:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Voucher not found")
     v.is_cancelled = True
+    
+    await log_activity(
+        db, company.id, current_user.id, "DATA_EDIT",
+        f"Cancelled {v.voucher_type} voucher: {v.number or v.id}",
+        {"voucher_id": str(v.id), "voucher_type": v.voucher_type, "number": v.number, "action": "cancel"}
+    )
+    
     await db.flush()
     await db.refresh(v)
     return _voucher_to_response(v)

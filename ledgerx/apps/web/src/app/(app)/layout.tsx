@@ -30,9 +30,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             setUser({
               id: me.id,
               email: me.email,
+              username: me.username,
               name: me.name,
               role: me.role,
               org_id: me.org_id,
+              profile_setup_needed: me.profile_setup_needed,
+              is_social: me.is_social,
             });
             setAuthState("authenticated");
           })
@@ -61,9 +64,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           setUser({
             id: me.id,
             email: me.email,
+            username: me.username,
             name: me.name,
             role: me.role,
             org_id: me.org_id,
+            profile_setup_needed: me.profile_setup_needed,
+            is_social: me.is_social,
           });
           setAuthState("authenticated");
         })
@@ -85,7 +91,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [user, authState]);
 
-  if (authState !== "authenticated") {
+  // Mandatory firm selection gate
+  const companyId = useAppStore((s) => s.companyId);
+  useEffect(() => {
+    if (authState === "authenticated" && !companyId) {
+      router.replace("/select-company");
+    }
+  }, [authState, companyId, router]);
+
+  if (authState !== "authenticated" || !companyId) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy">
         <div className="flex flex-col items-center gap-3">
@@ -93,7 +107,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             className="h-8 w-8 animate-spin rounded-full border-2 border-gold border-t-transparent"
             aria-hidden
           />
-          <div className="text-slate-500 dark:text-slate-400">Loading…</div>
+          <div className="text-slate-500 dark:text-slate-400">
+            {!companyId && authState === "authenticated" ? "Redirecting to selection…" : "Loading…"}
+          </div>
         </div>
       </div>
     );
@@ -122,4 +138,3 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-

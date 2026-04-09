@@ -9,6 +9,7 @@ from auth.dependencies import get_current_user, get_company_for_user
 from db.database import get_db
 from models import User, Company, LedgerGroup, Ledger
 from schemas.ledger import LedgerGroupResponse, LedgerCreate, LedgerUpdate, LedgerResponse
+from utils.activity import log_activity
 
 router = APIRouter(tags=["ledgers"])
 
@@ -37,6 +38,7 @@ async def list_ledgers(
 async def create_ledger(
     body: LedgerCreate,
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     ledger = Ledger(
@@ -58,6 +60,11 @@ async def create_ledger(
         state_code=body.state_code,
     )
     db.add(ledger)
+    await log_activity(
+        db, company.id, user.id, "DATA_EDIT",
+        f"Created ledger: {ledger.name}",
+        {"ledger_id": str(ledger.id), "name": ledger.name, "action": "create"}
+    )
     await db.flush()
     return LedgerResponse.model_validate(ledger)
 
@@ -67,6 +74,7 @@ async def update_ledger(
     ledger_id: UUID,
     body: LedgerUpdate,
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(select(Ledger).where(Ledger.id == ledger_id, Ledger.company_id == company.id))
@@ -104,6 +112,13 @@ async def update_ledger(
         ledger.address = body.address
     if body.state_code is not None:
         ledger.state_code = body.state_code
+    
+    await log_activity(
+        db, company.id, user.id, "DATA_EDIT",
+        f"Updated ledger: {ledger.name}",
+        {"ledger_id": str(ledger.id), "name": ledger.name, "action": "update"}
+    )
+    
     await db.flush()
     return LedgerResponse.model_validate(ledger)
 
@@ -112,6 +127,7 @@ async def update_ledger(
 async def delete_ledger(
     ledger_id: UUID,
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     from fastapi import HTTPException, status
@@ -119,6 +135,13 @@ async def delete_ledger(
     ledger = result.scalar_one_or_none()
     if not ledger:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ledger not found")
+    
+    await log_activity(
+        db, company.id, user.id, "DATA_EDIT",
+        f"Deleted ledger: {ledger.name}",
+        {"ledger_id": str(ledger.id), "name": ledger.name, "action": "delete"}
+    )
+    
     await db.delete(ledger)
     await db.flush()
 

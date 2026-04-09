@@ -1,7 +1,7 @@
 """Companies CRUD."""
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,18 +13,31 @@ from schemas.company import CompanyCreate, CompanyUpdate, CompanyResponse
 router = APIRouter(tags=["companies"])
 
 
+from utils.activity import log_activity_background
+from sqlalchemy import select, or_
+
 @router.get("", response_model=list[CompanyResponse])
 async def list_companies(
+    background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     from models import OrgUser
-    if current_user.org_id:
-        result = await db.execute(select(Company).where(Company.org_id == current_user.org_id))
-    else:
-        result = await db.execute(
-            select(Company).join(OrgUser, OrgUser.org_id == Company.org_id).where(OrgUser.user_id == current_user.id)
+    
+    # log_activity requires company_id (NOT NULL); listing all companies has no single-company context, skip.
+
+    # Subquery for all orgs the user belongs to via OrgUser
+    org_user_stmt = select(OrgUser.org_id).where(OrgUser.user_id == current_user.id)
+    
+    # Select all companies that belong to those orgs OR the user's primary org_id
+    stmt = select(Company).where(
+        or_(
+            Company.org_id == current_user.org_id,
+            Company.org_id.in_(org_user_stmt)
         )
+    )
+    
+    result = await db.execute(stmt)
     companies = result.scalars().all()
     return [CompanyResponse.model_validate(c) for c in companies]
 

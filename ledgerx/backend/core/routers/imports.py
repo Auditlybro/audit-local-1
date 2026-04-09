@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends, File, UploadFile, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth.dependencies import get_company_for_user
+from auth.dependencies import get_current_user, get_company_for_user
 from db.database import get_db
-from models import Company, ImportSession
+from models import User, Company, ImportSession
 from services.import_engine import (
     parse_tally_xml_content,
     parse_marg_csv,
@@ -17,6 +17,7 @@ from services.import_engine import (
     commit_import,
 )
 from schemas.import_export import ImportSessionResponse, ImportHistoryResponse, RollbackResponse
+from utils.activity import log_activity
 
 router = APIRouter(tags=["imports"])
 
@@ -37,6 +38,7 @@ async def _create_session(
 async def import_tally_xml(
     file: UploadFile = File(...),
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     content = await file.read()
@@ -48,6 +50,13 @@ async def import_tally_xml(
     sess.error_records = len(errors)
     sess.errors_json = [{"index": e["index"], "errors": e["errors"]} for e in errors]
     sess.status = "completed" if not errors else "partial"
+    
+    await log_activity(
+        db, company.id, user.id, "IMPORT",
+        f"Imported Tally XML: {file.filename} ({len(valid)} records)",
+        {"source": "tally_xml", "filename": file.filename, "session_id": str(sess.id)}
+    )
+    
     await db.flush()
     return ImportSessionResponse.model_validate(sess)
 
@@ -56,6 +65,7 @@ async def import_tally_xml(
 async def import_marg_csv(
     file: UploadFile = File(...),
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     content = await file.read()
@@ -63,6 +73,13 @@ async def import_marg_csv(
     sess = await _create_session(company.id, "marg_csv", file.filename, db)
     sess.total_records = len(vouchers)
     sess.status = "pending"
+    
+    await log_activity(
+        db, company.id, user.id, "IMPORT",
+        f"Started Marg CSV import: {file.filename}",
+        {"source": "marg_csv", "filename": file.filename, "session_id": str(sess.id)}
+    )
+    
     await db.flush()
     return ImportSessionResponse.model_validate(sess)
 
@@ -71,9 +88,17 @@ async def import_marg_csv(
 async def import_busy_xml(
     file: UploadFile = File(...),
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     sess = await _create_session(company.id, "busy_xml", file.filename, db)
+    
+    await log_activity(
+        db, company.id, user.id, "IMPORT",
+        f"Started Busy XML import: {file.filename}",
+        {"source": "busy_xml", "filename": file.filename, "session_id": str(sess.id)}
+    )
+    
     await db.flush()
     return ImportSessionResponse.model_validate(sess)
 
@@ -82,6 +107,7 @@ async def import_busy_xml(
 async def import_excel(
     file: UploadFile = File(...),
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     content = await file.read()
@@ -89,6 +115,13 @@ async def import_excel(
     sess = await _create_session(company.id, "excel", file.filename, db)
     sess.total_records = len(vouchers)
     sess.status = "pending"
+    
+    await log_activity(
+        db, company.id, user.id, "IMPORT",
+        f"Started Excel import: {file.filename}",
+        {"source": "excel", "filename": file.filename, "session_id": str(sess.id)}
+    )
+    
     await db.flush()
     return ImportSessionResponse.model_validate(sess)
 
@@ -97,9 +130,17 @@ async def import_excel(
 async def import_bank_statement(
     file: UploadFile = File(...),
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     sess = await _create_session(company.id, "bank_statement", file.filename, db)
+    
+    await log_activity(
+        db, company.id, user.id, "IMPORT",
+        f"Started Bank Statement import: {file.filename}",
+        {"source": "bank_statement", "filename": file.filename, "session_id": str(sess.id)}
+    )
+    
     await db.flush()
     return ImportSessionResponse.model_validate(sess)
 
@@ -108,9 +149,17 @@ async def import_bank_statement(
 async def import_gst_json(
     file: UploadFile = File(...),
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     sess = await _create_session(company.id, "gst_json", file.filename, db)
+    
+    await log_activity(
+        db, company.id, user.id, "IMPORT",
+        f"Started GST JSON import: {file.filename}",
+        {"source": "gst_json", "filename": file.filename, "session_id": str(sess.id)}
+    )
+    
     await db.flush()
     return ImportSessionResponse.model_validate(sess)
 
@@ -146,6 +195,7 @@ async def get_import_session(
 async def rollback_import(
     session_id: UUID,
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
@@ -155,5 +205,12 @@ async def rollback_import(
     if not sess:
         raise HTTPException(status_code=404, detail="Session not found")
     sess.status = "rolled_back"
+    
+    await log_activity(
+        db, company.id, user.id, "IMPORT_ROLLBACK",
+        f"Rolled back import session item: {sess.file_name or sess.id}",
+        {"session_id": str(session_id), "source": sess.source_type}
+    )
+    
     await db.flush()
     return RollbackResponse(session_id=session_id, rolled_back=True, message="Session marked as rolled back")

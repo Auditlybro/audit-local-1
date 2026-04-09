@@ -25,10 +25,12 @@ class User(Base, TimestampMixin):
     __tablename__ = "users"
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid_default)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+    username: Mapped[str | None] = mapped_column(String(50), nullable=True)
     name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     role: Mapped[str] = mapped_column(String(50), nullable=False, default="user")
     org_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), ForeignKey("organizations.id", ondelete="SET NULL"), nullable=True)
     password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    auth_method: Mapped[str] = mapped_column(String(50), nullable=False, default="manual")
     # relationships
     org: Mapped["Organization | None"] = relationship("Organization", backref="users")
 
@@ -55,3 +57,16 @@ class Company(Base, TimestampMixin):
     financial_year: Mapped[str | None] = mapped_column(String(9), nullable=True)
     logo_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     org: Mapped["Organization"] = relationship("Organization", backref="companies")
+
+
+class ActivityLog(Base, TimestampMixin):
+    __tablename__ = "activity_logs"
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid_default)
+    company_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), ForeignKey("companies.id", ondelete="CASCADE"), nullable=True)
+    user_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    action: Mapped[str] = mapped_column(String(50), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False)
+    metadata_json: Mapped[dict | list] = mapped_column(JSONB, default=dict)
+
+
+

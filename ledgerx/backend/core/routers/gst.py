@@ -7,9 +7,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth.dependencies import get_company_for_user
+from auth.dependencies import get_current_user, get_company_for_user
 from db.database import get_db
-from models import Company, GstNotice, GstReturn
+from models import User, Company, GstNotice, GstReturn
+from utils.activity import log_activity
 from schemas.gst import (
     DraftReplyRequest,
     GstCalendarItem,
@@ -113,6 +114,7 @@ async def gst_compliance_summary(
 async def mark_gst_return_filed(
     body: MarkGstReturnFiled,
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
@@ -137,6 +139,11 @@ async def mark_gst_return_filed(
                 filed_at=now,
             )
         )
+    await log_activity(
+        db, company.id, user.id, "GST_RETURN", 
+        f"Marked {body.return_type} for {body.period} as filed",
+        {"return_type": body.return_type, "period": body.period}
+    )
     await db.flush()
     return {"ok": True, "return_type": body.return_type, "period": body.period}
 
@@ -196,6 +203,7 @@ async def list_gst_notices(
 async def create_gst_notice(
     body: GstNoticeCreate,
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     notice = GstNotice(
@@ -209,6 +217,11 @@ async def create_gst_notice(
         notice_text=body.notice_text,
     )
     db.add(notice)
+    await log_activity(
+        db, company.id, user.id, "GST_NOTICE_CREATE",
+        f"Created GST Notice reference: {body.notice_ref}",
+        {"notice_ref": body.notice_ref, "notice_type": body.notice_type, "notice_id": str(notice.id)}
+    )
     await db.flush()
     return GstNoticeResponse.model_validate(notice)
 
@@ -217,11 +230,18 @@ async def create_gst_notice(
 async def analyze_notice(
     notice_id: UUID,
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(select(GstNotice).where(GstNotice.id == notice_id, GstNotice.company_id == company.id))
     if not result.scalar_one_or_none():
         raise HTTPException(status_code=404, detail="Notice not found")
+    
+    await log_activity(
+        db, company.id, user.id, "AI_ANALYSIS",
+        f"Ran AI analysis on notice: {notice_id}",
+        {"notice_id": str(notice_id)}
+    )
     return {"notice_id": str(notice_id), "analysis": "placeholder"}
 
 
@@ -230,6 +250,7 @@ async def draft_reply(
     notice_id: UUID,
     body: DraftReplyRequest,
     company: Company = Depends(get_company_for_user),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(select(GstNotice).where(GstNotice.id == notice_id, GstNotice.company_id == company.id))
@@ -237,5 +258,10 @@ async def draft_reply(
     if not notice:
         raise HTTPException(status_code=404, detail="Notice not found")
     notice.reply_text = body.reply_text
+    await log_activity(
+        db, company.id, user.id, "NOTICE_DRAFT",
+        f"Generated/Updated draft reply for notice: {notice_id}",
+        {"notice_id": str(notice_id)}
+    )
     await db.flush()
     return {"notice_id": str(notice_id), "reply_text": body.reply_text}

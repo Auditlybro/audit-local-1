@@ -1,6 +1,6 @@
 """SQLAlchemy models."""
 from models.base import Base, TimestampMixin, UUIDMixin, uuid_default
-from models.organization import Organization, User, OrgUser, Company
+from models.organization import Organization, User, OrgUser, Company, ActivityLog
 from models.ledger_models import LedgerGroup, Ledger
 from models.stock_models import StockGroup, StockItem, Unit, Godown, Employee
 from models.voucher_models import Voucher, VoucherEntry, InvoiceItem
@@ -23,6 +23,7 @@ __all__ = [
     "User",
     "OrgUser",
     "Company",
+    "ActivityLog",
     "LedgerGroup",
     "Ledger",
     "StockGroup",

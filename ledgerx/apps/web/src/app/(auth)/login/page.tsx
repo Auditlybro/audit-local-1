@@ -11,8 +11,8 @@ import AppleSignin from "react-apple-signin-auth";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { setUser, setCompanyId } = useAppStore();
-  const [email, setEmail] = useState("");
+  const { setUser, setCompanies } = useAppStore();
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const login = useMutation({
-    mutationFn: () => authApi.login({ email, password }),
+    mutationFn: () => authApi.login({ identifier, password }),
     onSuccess: async (res) => {
       const { access_token, refresh_token } = res.data;
       if (typeof window !== "undefined") {
@@ -36,21 +36,30 @@ export default function LoginPage() {
       setUser({
         id: me.id,
         email: me.email,
+        username: me.username,
         name: me.name,
         role: me.role,
         org_id: me.org_id,
+        profile_setup_needed: me.profile_setup_needed,
+        is_social: me.is_social,
       });
+
+      if (me.profile_setup_needed) {
+        setLoginSuccess(true);
+        setTimeout(() => router.push("/register?step=3"), 1200);
+        return;
+      }
       const { data: companies } = await (
         await import("@/lib/api")
       ).companiesApi.list();
       setWelcomeName(me.name || me.email.split("@")[0]);
       setIsNewUser(companies.length === 0);
       setLoginSuccess(true);
-      setGoogleLoading(true);
       setTimeout(() => {
         if (companies.length > 0) {
-          setCompanyId(companies[0].id);
-          router.push("/dashboard");
+          setCompanies(companies.map((c) => ({ id: c.id, name: c.name })));
+          // No longer auto-selecting companyId to enforce the selection gate
+          router.push("/select-company");
         } else {
           router.push("/register?step=3");
         }
@@ -73,10 +82,19 @@ export default function LoginPage() {
         setUser({
           id: me.id,
           email: me.email,
+          username: me.username,
           name: me.name,
           role: me.role,
           org_id: me.org_id,
+          profile_setup_needed: me.profile_setup_needed,
+          is_social: me.is_social,
         });
+
+        if (me.profile_setup_needed) {
+          setLoginSuccess(true);
+          setTimeout(() => router.push("/register?step=3"), 1200);
+          return;
+        }
         const { data: companies } = await (
           await import("@/lib/api")
         ).companiesApi.list();
@@ -85,8 +103,8 @@ export default function LoginPage() {
         setLoginSuccess(true);
         setTimeout(() => {
           if (companies.length > 0) {
-            setCompanyId(companies[0].id);
-            router.push("/dashboard");
+            setCompanies(companies.map((c) => ({ id: c.id, name: c.name })));
+            router.push("/select-company");
           } else {
             router.push("/register?step=3");
           }
@@ -99,14 +117,15 @@ export default function LoginPage() {
         setGoogleLoading(false);
       }
     },
-    onError: (err) => {
+    onError: (err: unknown) => {
+      const error = err as { response?: { status?: number; data?: { detail?: string } } };
+      // #region agent log
+      fetch('http://localhost:8002/debug-log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'e34ec7',runId:'login-debug-2',hypothesisId:'G3',location:'login:google:mutation-error',message:'Google mutation onError',data:{status:error?.response?.status??null,detail:error?.response?.data?.detail??null,msg:String(err)?.slice(0,200)},timestamp:Date.now()})}).catch(()=>{});
+      // #endregion
       console.error("Google login API call failed:", err);
       setGoogleError("Google sign-in failed. Please try again.");
       setGoogleLoading(false);
-    },
-    onSettled: () => {
-      // Don't turn off loading on success yet, let the redirect handle it
-    },
+    }
   });
 
   const appleLogin = useMutation({
@@ -121,10 +140,19 @@ export default function LoginPage() {
       setUser({
         id: me.id,
         email: me.email,
+        username: me.username,
         name: me.name,
         role: me.role,
         org_id: me.org_id,
+        profile_setup_needed: me.profile_setup_needed,
+        is_social: me.is_social,
       });
+
+      if (me.profile_setup_needed) {
+        setLoginSuccess(true);
+        setTimeout(() => router.push("/register?step=3"), 1200);
+        return;
+      }
       const { data: companies } = await (
         await import("@/lib/api")
       ).companiesApi.list();
@@ -133,18 +161,18 @@ export default function LoginPage() {
       setLoginSuccess(true);
       setTimeout(() => {
         if (companies.length > 0) {
-          setCompanyId(companies[0].id);
-          router.push("/dashboard");
+          setCompanies(companies.map((c) => ({ id: c.id, name: c.name })));
+          router.push("/select-company");
         } else {
           router.push("/register?step=3");
         }
       }, 1200);
     },
-    onError: (err) => {
+    onError: (err: unknown) => {
       console.error("Apple login failed:", err);
       setErrorMsg("Apple sign-in failed.");
       setAppleLoading(false);
-    },
+    }
   });
 
   const msLogin = useMutation({
@@ -160,10 +188,19 @@ export default function LoginPage() {
         setUser({
           id: me.id,
           email: me.email,
+          username: me.username,
           name: me.name,
           role: me.role,
           org_id: me.org_id,
+          profile_setup_needed: me.profile_setup_needed,
+          is_social: me.is_social,
         });
+
+        if (me.profile_setup_needed) {
+          setLoginSuccess(true);
+          setTimeout(() => router.push("/register?step=3"), 1200);
+          return;
+        }
         const { data: companies } = await (
           await import("@/lib/api")
         ).companiesApi.list();
@@ -172,8 +209,8 @@ export default function LoginPage() {
         setLoginSuccess(true);
         setTimeout(() => {
           if (companies.length > 0) {
-            setCompanyId(companies[0].id);
-            router.push("/dashboard");
+            setCompanies(companies.map((c) => ({ id: c.id, name: c.name })));
+            router.push("/select-company");
           } else {
             router.push("/register?step=3");
           }
@@ -184,11 +221,15 @@ export default function LoginPage() {
         setMsLoading(false);
       }
     },
-    onError: (err) => {
+    onError: (err: unknown) => {
+      const error = err as { response?: { status?: number; data?: { detail?: string } } };
+      // #region agent log
+      fetch('http://localhost:8002/debug-log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'e34ec7',runId:'login-debug-2',hypothesisId:'M3',location:'login:ms:mutation-error',message:'MS mutation onError',data:{status:error?.response?.status??null,detail:error?.response?.data?.detail??null,msg:String(err)?.slice(0,200)},timestamp:Date.now()})}).catch(()=>{});
+      // #endregion
       console.error("Microsoft login failed:", err);
       setErrorMsg("Microsoft sign-in failed.");
       setMsLoading(false);
-    },
+    }
   });
 
   const handleMsLogin = () => {
@@ -198,6 +239,9 @@ export default function LoginPage() {
     const nonce = Math.random().toString(36).substring(2);
     const scope = encodeURIComponent("openid email profile");
     const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=id_token&redirect_uri=${redirectUri}&scope=${scope}&response_mode=fragment&nonce=${nonce}`;
+    // #region agent log
+    fetch('http://localhost:8002/debug-log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'e34ec7',runId:'login-debug-2',hypothesisId:'M1',location:'login:ms:popup-open',message:'Opening MS popup',data:{clientId:clientId?.slice(0,8),origin:window.location.origin},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
 
     const popup = window.open(authUrl, "ms-login", "width=500,height=700,top=100,left=400");
     let gotToken = false;
@@ -207,6 +251,9 @@ export default function LoginPage() {
       if (event.data?.type !== "ms-auth") return;
       window.removeEventListener("message", handleMessage);
       gotToken = true;
+      // #region agent log
+      fetch('http://localhost:8002/debug-log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'e34ec7',runId:'login-debug-2',hypothesisId:'M2',location:'login:ms:got-message',message:'MS popup returned message',data:{hasToken:!!event.data.id_token,error:event.data.error||null},timestamp:Date.now()})}).catch(()=>{});
+      // #endregion
       if (event.data.id_token) {
         msLogin.mutate(event.data.id_token);
       } else {
@@ -320,15 +367,15 @@ export default function LoginPage() {
         >
           <div>
             <label className="block text-sm font-medium text-slate-600 dark:text-slate-300">
-              Email
+              Email or Username
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
               required
               className="mt-1 w-full rounded-lg border border-slate-200 dark:border-navy-100/30 bg-slate-50 dark:bg-navy-300 px-3 py-2 text-slate-900 dark:text-white placeholder-slate-500"
-              placeholder="you@example.com"
+              placeholder="you@example.com or username"
             />
           </div>
           <div>
@@ -395,12 +442,18 @@ export default function LoginPage() {
             <div className="absolute inset-0.5 rounded bg-black opacity-0 group-hover:opacity-5 transition-opacity pointer-events-none" />
             <GoogleLogin
               onSuccess={(credentialResponse) => {
+                // #region agent log
+                fetch('http://localhost:8002/debug-log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'e34ec7',runId:'login-debug-2',hypothesisId:'G1',location:'login:google:sdk-success',message:'Google SDK returned credential',data:{hasCred:!!credentialResponse.credential,credLen:credentialResponse.credential?.length??0},timestamp:Date.now()})}).catch(()=>{});
+                // #endregion
                 if (credentialResponse.credential) {
                   setGoogleLoading(true);
                   googleLogin.mutate(credentialResponse.credential);
                 }
               }}
               onError={() => {
+                // #region agent log
+                fetch('http://localhost:8002/debug-log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'e34ec7',runId:'login-debug-2',hypothesisId:'G2',location:'login:google:sdk-error',message:'Google SDK onError fired',data:{},timestamp:Date.now()})}).catch(()=>{});
+                // #endregion
                 setGoogleLoading(false);
                 console.log("Login Failed");
               }}

@@ -1,7 +1,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type User = { id: string; email: string; name: string | null; role: string; org_id: string | null };
+type User = { 
+  id: string; 
+  email: string; 
+  username: string | null; 
+  name: string | null; 
+  role: string; 
+  org_id: string | null; 
+  profile_setup_needed: boolean;
+  is_social: boolean;
+};
 
 type AppState = {
   user: User | null;

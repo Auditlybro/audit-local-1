@@ -11,8 +11,15 @@ class RegisterRequest(BaseModel):
     org_name: str | None = None
 
 
+class ProfileSetupRequest(BaseModel):
+    name: str
+    username: str | None = None
+    password: str | None = None
+    org_name: str | None = None
+
+
 class LoginRequest(BaseModel):
-    email: EmailStr
+    identifier: str  # Email or Username
     password: str
 
 
@@ -42,9 +49,12 @@ class TokenResponse(BaseModel):
 class UserResponse(BaseModel):
     id: UUID
     email: str
+    username: str | None
     name: str | None
     role: str
     org_id: UUID | None
+    profile_setup_needed: bool = False
+    is_social: bool = False
 
     class Config:
         from_attributes = True

@@ -58,7 +58,10 @@ api.interceptors.response.use(
     if (err.response?.status === 404 && typeof window !== "undefined") {
       const detail = err.response?.data?.detail;
       if (detail === "Company not found") {
-        useAppStore.getState().setCompanyId(null);
+        const { setCompanyId } = useAppStore.getState();
+        setCompanyId(null);
+        import("react-hot-toast").then((m) => m.toast.error("Active firm not found. Please select again."));
+        window.location.href = "/select-company";
       }
     }
     return Promise.reject(err);
@@ -78,7 +81,7 @@ export const authApi = {
       refresh_token: string;
       expires_in: number;
     }>("/auth/register", body),
-  login: (body: { email: string; password: string }) =>
+  login: (body: { identifier: string; password: string }) =>
     api.post<{
       access_token: string;
       refresh_token: string;
@@ -94,10 +97,24 @@ export const authApi = {
     api.get<{
       id: string;
       email: string;
+      username: string | null;
       name: string | null;
       role: string;
       org_id: string | null;
+      profile_setup_needed: boolean;
+      is_social: boolean;
     }>("/auth/me"),
+  setupProfile: (body: { name: string; username?: string; password?: string; org_name?: string }) =>
+    api.post<{
+      id: string;
+      email: string;
+      username: string | null;
+      name: string | null;
+      role: string;
+      org_id: string | null;
+      profile_setup_needed: boolean;
+      is_social: boolean;
+    }>("/auth/setup-profile", body),
   otpSend: (body: { email: string }) =>
     api.post<{ message: string }>("/auth/otp/send", body),
   otpVerify: (body: { email: string; code: string }) =>
@@ -190,6 +207,7 @@ export type StockItem = {
   gst_rate: number | null;
   mrp: number | null;
   opening_qty: number;
+  opening_qty_available?: number;
   opening_value: number;
   reorder_level: number | null;
 };
@@ -299,4 +317,26 @@ export const bankingApi = {
 // --- Import ---
 export const importApi = {
   history: (companyId: string) => api.get<{ sessions: { id: string; source_type: string; status: string; total_records: number; imported_records: number; created_at: string }[] }>(`/companies/${companyId}/import/history`),
+};
+
+// --- Activity ---
+export type ActivityLog = {
+  id: string;
+  company_id: string | null;
+  user_id: string | null;
+  user_name: string | null;
+  action: string;
+  description: string;
+  metadata_json: Record<string, unknown> | unknown[] | null;
+  created_at: string;
+};
+export type ActivityLogListResponse = {
+  logs: ActivityLog[];
+  total: number;
+  page: number;
+  page_size: number;
+};
+export const activityApi = {
+  list: (companyId?: string | null, params?: { page?: number; page_size?: number }) =>
+    api.get<ActivityLogListResponse>(`/activity`, { params: { ...params, company_id: companyId } }),
 };

@@ -8,6 +8,7 @@ import { useNavStore } from "@/lib/store";
 import { Logo } from "@/components/brand/Logo";
 import {
   LayoutDashboard,
+  History,
   BookOpen,
   FolderTree,
   Package,
@@ -30,7 +31,10 @@ import {
 const navSections = [
   {
     title: "Main",
-    items: [{ href: "/dashboard", label: "Dashboard", icon: LayoutDashboard }],
+    items: [
+      { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/activity", label: "Activity Log", icon: History },
+    ],
   },
   {
     title: "Masters",
